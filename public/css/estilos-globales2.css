@@ -1,0 +1,337 @@
+/* ========== OPCIÓN 1: MINIMALISTA MODERNO ========== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c3e50;
+}
+
+/* ========== BOX PRINCIPAL ========== */
+.box {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border: none;
+    background-color: white;
+    margin-bottom: 25px;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.box:hover {
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+/* ========== HEADERS ========== */
+.box-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    padding: 22px 30px !important;
+    font-weight: 800 !important;
+    border-radius: 16px 16px 0 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    border: none !important;
+    font-size: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.box-header:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+}
+
+.box-header font {
+    color: white !important;
+}
+
+.box-header strong {
+    color: white !important;
+}
+
+.box-body {
+    padding: 30px !important;
+    background-color: #fafbfc !important;
+}
+
+/* ========== FORMULARIOS ========== */
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #e1e8ed;
+    padding: 12px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: white;
+    color: #2c3e50;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    outline: none;
+}
+
+.form-control:hover {
+    border-color: #b0c4de;
+}
+
+.form-group-sm label {
+    font-weight: 700;
+    font-size: 12px;
+    color: #34495e;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: block;
+}
+
+/* ========== BOTONES ========== */
+.btn {
+    border-radius: 10px;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    padding: 12px 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #00d2fc 0%, #3a47d5 100%) !important;
+    color: white !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #00c4e8 0%, #2f3fb8 100%) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5568d3 0%, #67408c 100%) !important;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+    color: white !important;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #e67eeb 0%, #e64455 100%) !important;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%) !important;
+    color: white !important;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #f55c8f 0%, #fdd82e 100%) !important;
+}
+
+.btn-default {
+    background: linear-gradient(135deg, #e8eef2 0%, #d5dce0 100%) !important;
+    color: #34495e !important;
+    border: 2px solid #c0c9d1 !important;
+}
+
+.btn-default:hover {
+    background: linear-gradient(135deg, #d5dce0 0%, #bfc5cc 100%) !important;
+}
+
+.btn-sm {
+    padding: 8px 14px;
+    font-size: 11px;
+}
+
+/* ========== TABLAS ========== */
+.table {
+    background-color: white;
+    border-collapse: collapse;
+    margin-bottom: 0;
+    font-size: 13px;
+}
+
+.table thead {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.table thead th {
+    padding: 16px 14px;
+    font-weight: 700;
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 11px;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #e8eef2;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.table tbody tr:hover {
+    background: linear-gradient(90deg, #f8fafc 0%, #f0f5fa 100%);
+    box-shadow: inset 0 0 10px rgba(102, 126, 234, 0.08);
+}
+
+.table tbody td {
+    padding: 16px 14px;
+    vertical-align: middle;
+    color: #2c3e50;
+}
+
+/* ========== INPUT GROUPS ========== */
+.input-group {
+    display: flex;
+    border-radius: 10px;
+}
+
+.input-group .form-control {
+    border-radius: 10px 0 0 10px;
+    margin-right: 0;
+}
+
+.input-group-btn {
+    display: flex;
+}
+
+.input-group-btn .btn {
+    border-radius: 0 10px 10px 0;
+    margin-left: 0;
+    padding: 12px 16px;
+}
+
+/* ========== ANIMACIONES ========== */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.box {
+    animation: slideInDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ========== ALERTAS ========== */
+.alert {
+    border-radius: 10px;
+    border: none;
+    padding: 16px 20px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    color: white;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #3a47d5 0%, #00d2fc 100%);
+    color: white;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1200px) {
+    .box-header {
+        padding: 18px 20px !important;
+        font-size: 12px !important;
+    }
+
+    .box-body {
+        padding: 20px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .box-body {
+        padding: 15px !important;
+    }
+
+    .box-header {
+        padding: 12px 15px !important;
+        font-size: 11px !important;
+    }
+
+    .btn {
+        padding: 10px 14px;
+        font-size: 11px;
+    }
+
+    .table {
+        font-size: 11px;
+    }
+
+    .table thead th {
+        padding: 12px 8px;
+        font-size: 9px;
+    }
+
+    .table tbody td {
+        padding: 12px 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    .box-body {
+        padding: 12px !important;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 10px;
+    }
+}

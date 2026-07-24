@@ -1,0 +1,39 @@
+  @extends('layouts.empresas')
+  @section('contenido')
+  <div class="container">
+		<div class="panel panel-info">
+		<div class="panel-heading">
+		    <div class="btn-group pull-right">
+				<a  href="{{config('global.ruta')}}/nuevanotadebito" class="btn btn-info"><span class="glyphicon glyphicon-plus" ></span> Nueva Nota de Débito</a>
+			</div>
+			<h4><i class='glyphicon glyphicon-search'></i> Buscar Notas de Débitos</h4>
+		</div>
+			<div class="panel-body">
+				<form class="form-horizontal" role="form" id="datos_cotizacion">
+				
+						<div class="form-group row">
+							<label for="q" class="col-md-3 control-label">Cliente o N° Nota de Débito</label>
+							<div class="col-md-5">
+								<input type="text" class="form-control" id="q" placeholder="Nombre del cliente / Número de Nota Crédito" onkeyup='load(1);'>
+							</div>
+							
+							
+							
+							<div class="col-md-3">
+								<button type="button" class="btn btn-default" onclick='load(1);'>
+									<span class="glyphicon glyphicon-search" ></span> Buscar</button>
+								<span id="loader"></span>
+							</div>
+							
+						</div>
+				
+				
+				
+			</form>
+				<div id="resultados"></div><!-- Carga los datos ajax -->
+				<div class='outer_div'></div><!-- Carga los datos ajax -->
+			</div>
+		</div>	
+		
+	</div>
+@stop

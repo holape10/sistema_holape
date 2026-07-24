@@ -1,0 +1,225 @@
+/* ========== ESTILOS GLOBALES ELEGANTES (DARK ACCENT) ========== */
+:root {
+    --color-primary: #37474F; /* Gris oscuro para acentos */
+    --color-secondary: #546E7A; /* Gris azulado para texto */
+    --color-success: #388E3C; /* Verde oscuro para éxito */
+    --color-danger: #D32F2F; /* Rojo oscuro para peligro */
+    --color-background: #F8F9FA; /* Fondo muy claro */
+    --color-surface: #FFFFFF; /* Superficie de tarjetas */
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --border-radius-base: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más moderna */
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-secondary);
+}
+
+/* 🖼️ Contenedores / Tarjetas (Box) */
+.box {
+    border-radius: var(--border-radius-base);
+    overflow: hidden;
+    box-shadow: var(--shadow-light);
+    border: 1px solid #ECEFF1; /* Borde sutil */
+    background-color: var(--color-surface);
+    margin-bottom: 25px;
+    transition: box-shadow 0.4s ease, transform 0.2s ease;
+}
+
+.box:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px); /* Efecto de "levantamiento" sutil */
+}
+
+.box-header {
+    background-color: var(--color-primary) !important;
+    color: white !important;
+    padding: 16px 25px !important;
+    font-weight: 600 !important;
+    font-size: 14px;
+    border-radius: var(--border-radius-base) var(--border-radius-base) 0 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    border-bottom: 1px solid #263238 !important;
+}
+
+.box-header font, .box-header strong {
+    color: white !important;
+}
+
+.box-body {
+    padding: 25px !important;
+    background-color: var(--color-surface) !important; /* Más limpio */
+}
+
+/* 📝 Formularios */
+.form-control {
+    border-radius: 4px; /* Más sutil */
+    border: 1px solid #CFD8DC; /* Borde más fino */
+    padding: 12px 15px;
+    font-size: 14px;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(55, 71, 79, 0.15); /* Sombra de foco más discreta */
+    outline: none;
+}
+
+.form-group-sm label {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+    text-transform: none; /* Mejor legibilidad */
+    letter-spacing: 0;
+    display: block;
+}
+
+/* 🔘 Botones */
+.btn {
+    border-radius: 4px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    padding: 10px 20px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    transform: translateY(-1px); /* Menos movimiento */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Reemplazamos los gradientes de botones con colores sólidos profundos */
+.btn-success {
+    background-color: var(--color-success) !important;
+    color: white !important;
+}
+
+.btn-success:hover {
+    background-color: #2E7D32 !important;
+}
+
+.btn-primary {
+    background-color: var(--color-primary) !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background-color: #263238 !important;
+}
+
+.btn-danger {
+    background-color: var(--color-danger) !important;
+    color: white !important;
+}
+
+.btn-danger:hover {
+    background-color: #C62828 !important;
+}
+
+.btn-default {
+    background: #E0E0E0 !important;
+    color: var(--color-primary) !important;
+    border: 1px solid #B0BEC5 !important;
+}
+
+.btn-default:hover {
+    background: #CFD8DC !important;
+}
+
+/* 📊 Tablas */
+.table {
+    background-color: white;
+    border-collapse: collapse;
+    margin-bottom: 0;
+    border-radius: var(--border-radius-base);
+    overflow: hidden; /* Para que el borde redondeado se aplique bien */
+    border: 1px solid #ECEFF1;
+}
+
+.table thead {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.table thead th {
+    padding: 14px 15px;
+    font-weight: 600;
+    text-align: left; /* Generalmente más legible */
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-size: 12px;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #F0F4F7;
+    transition: background-color 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #F8F9FA;
+    /* Eliminamos la sombra inset para un look más limpio */
+}
+
+.table tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    color: var(--color-secondary);
+    font-size: 13px;
+}
+
+/* 🔗 Input Groups */
+.input-group .form-control {
+    border-radius: 4px 0 0 4px;
+}
+
+.input-group-btn .btn {
+    border-radius: 0 4px 4px 0;
+}
+
+/* ⚡ Animaciones */
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.box {
+    animation: fadeInSlide 0.5s ease-out;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+    .box-body {
+        padding: 15px !important;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 10px;
+    }
+
+    .table thead th {
+        font-size: 10px;
+    }
+}

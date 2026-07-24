@@ -1,0 +1,327 @@
+/* ========== OPCIÓN 2: CORPORATIVO PREMIUM ========== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #1a1a1a;
+    min-height: 100vh;
+}
+
+/* ========== BOX PRINCIPAL ========== */
+.box {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: white;
+    margin-bottom: 25px;
+    transition: all 0.35s cubic-bezier(0.4, 0.0, 0.2, 1);
+    backdrop-filter: blur(10px);
+}
+
+.box:hover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+    border-color: rgba(30, 144, 255, 0.2);
+}
+
+/* ========== HEADERS ========== */
+.box-header {
+    background: linear-gradient(90deg, #1e90ff 0%, #000080 50%, #1e90ff 100%) !important;
+    background-size: 200% 100% !important;
+    color: white !important;
+    padding: 24px 32px !important;
+    font-weight: 800 !important;
+    border-radius: 14px 14px 0 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.4px !important;
+    border: none !important;
+    font-size: 13px !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.box-header:hover {
+    background-position: right center !important;
+}
+
+.box-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none;
+}
+
+.box-header font {
+    color: white !important;
+    position: relative;
+    z-index: 1;
+}
+
+.box-header strong {
+    color: white !important;
+    position: relative;
+    z-index: 1;
+}
+
+.box-body {
+    padding: 32px !important;
+    background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%) !important;
+}
+
+/* ========== FORMULARIOS ========== */
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #d1d9e0;
+    padding: 13px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: white;
+    color: #1a1a1a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.form-control:focus {
+    border-color: #1e90ff;
+    box-shadow: 0 0 0 4px rgba(30, 144, 255, 0.12);
+    outline: none;
+}
+
+.form-control:hover {
+    border-color: #5fa3f0;
+}
+
+.form-group-sm label {
+    font-weight: 700;
+    font-size: 11px;
+    color: #34495e;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    display: block;
+}
+
+/* ========== BOTONES ========== */
+.btn {
+    border-radius: 8px;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    padding: 13px 22px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #00d4aa 0%, #0095a8 100%) !important;
+    color: white !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #00c99a 0%, #007a96 100%) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #1e90ff 0%, #000080 100%) !important;
+    color: white !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #1680e8 0%, #00006e 100%) !important;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%) !important;
+    color: white !important;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #ff5555 0%, #e64661 100%) !important;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffa502 0%, #ff7a00 100%) !important;
+    color: white !important;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #ff9600 0%, #ff6d00 100%) !important;
+}
+
+.btn-default {
+    background: linear-gradient(135deg, #e0e6ed 0%, #d5dce0 100%) !important;
+    color: #34495e !important;
+    border: 2px solid #c0c9d1 !important;
+}
+
+.btn-default:hover {
+    background: linear-gradient(135deg, #d5dce0 0%, #bfc5cc 100%) !important;
+}
+
+.btn-sm {
+    padding: 9px 14px;
+    font-size: 11px;
+}
+
+/* ========== TABLAS ========== */
+.table {
+    background-color: white;
+    border-collapse: collapse;
+    margin-bottom: 0;
+    font-size: 13px;
+}
+
+.table thead {
+    background: linear-gradient(90deg, #1e90ff 0%, #000080 100%);
+    color: white;
+}
+
+.table thead th {
+    padding: 16px 14px;
+    font-weight: 700;
+    text-align: center;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-size: 11px;
+}
+
+.table tbody tr {
+    border-bottom: 2px solid #e8eef2;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.table tbody tr:hover {
+    background-color: #f5f9fc;
+    border-bottom-color: #1e90ff;
+    box-shadow: 0 2px 8px rgba(30, 144, 255, 0.1);
+}
+
+.table tbody td {
+    padding: 16px 14px;
+    vertical-align: middle;
+    color: #2c3e50;
+}
+
+/* ========== INPUT GROUPS ========== */
+.input-group {
+    display: flex;
+    border-radius: 8px;
+}
+
+.input-group .form-control {
+    border-radius: 8px 0 0 8px;
+    margin-right: 0;
+}
+
+.input-group-btn {
+    display: flex;
+}
+
+.input-group-btn .btn {
+    border-radius: 0 8px 8px 0;
+    margin-left: 0;
+    padding: 13px 16px;
+}
+
+/* ========== ALERTAS ========== */
+.alert {
+    border-radius: 8px;
+    border: none;
+    padding: 16px 20px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e72 100%);
+    color: white;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #00d4aa 0%, #0095a8 100%);
+    color: white;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1200px) {
+    .box-header {
+        padding: 20px 26px !important;
+        font-size: 12px !important;
+    }
+
+    .box-body {
+        padding: 24px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .box-body {
+        padding: 16px !important;
+    }
+
+    .box-header {
+        padding: 14px 18px !important;
+        font-size: 11px !important;
+    }
+
+    .btn {
+        padding: 10px 14px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 576px) {
+    .box-body {
+        padding: 12px !important;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 10px;
+    }
+}

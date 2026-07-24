@@ -1,0 +1,240 @@
+   <style>
+.page-break {
+				page-break-after: always;
+			}
+
+	
+			th, td {
+			    padding: 1px;
+			}
+	</style>
+
+
+						<table id="dtHorizontalExample"  class="table table-responsive table-striped table-bordered table-sm">
+							<thead>
+								<tr style="background:blue;">
+									<th colspan="17"><font color="white"><strong><center>REGISTRO DE INVENTARIO PERMANENTE VALORIZADO</center></strong></font></th>
+									
+								</tr>
+								<tr>
+									<th colspan="3">PERIODO: </th>
+									<th colspan="13">De {{$fecin}} HASTA {{$fecfin}}</th>
+								</tr>
+								<tr>
+									<th colspan="3">RUC: </th>
+									<th colspan="13">{{$dat_suc->IdEmpresa}}</th>
+								</tr>
+								<tr>
+									<th colspan="3">NOMBRE Y/O RAZON SOCIAL: </th>
+									<th colspan="13">{{$dat_emp->NomEmpresa}}</th>
+								</tr>
+								<tr>
+									<th colspan="3">ESTABLECIMIENTO: </th>
+									<th colspan="13">{{$dat_alm->descripcion}}</th>
+								</tr>
+								<tr>
+									<th colspan="3">TIPO: </th>
+									<th colspan="13"></th>
+								</tr>
+								<tr>
+									<th colspan="3">METODO DE VALUACION: </th>
+									<th colspan="13"></th>
+								</tr>
+								<tr style="background:blue;">
+									<th colspan="5"><center><font color="white"><strong>DOCUMENTO DE TRASLADO, COMPROBANTE DE PAGO, DOCUMENTO INTERNO O SIMILAR</center></strong></font></th>
+									<th><font color="white"><strong><center>STOCK INICIAL</center></strong></font></th>
+									<th colspan="1"><font color="white"><strong><center>ENTRADAS</center></strong></font></th>
+									<th colspan="1"><font color="white"><strong><center>SALIDAS</center></strong></font></th>
+									<th colspan="1"><font color="white"><strong><center>SALDO FINAL</center></strong></font></th>
+								
+								</tr>
+								<tr>
+									
+									<th>FECHA</th>
+									<TH>TIPO</TH>
+									<TH>SERIE</TH>
+										<TH>NUMERO</TH>
+									<TH>DESCRIPCION</TH>
+								
+									
+									<th>CANTIDAD</th>
+								
+									<th>CANTIDAD</th>
+								
+									<th>CANTIDAD</th>
+									
+								</tr>
+
+								
+							</thead>
+							
+							<tbody>
+						
+								@foreach($productos as $pro)
+
+								@php
+
+								  $bus_ven = DB::table('movimientos_productos')
+								  ->where('IdProducto_rel',$pro->IdProducto)
+								   ->where('id_almacen','=',$almacen)
+								  ->where('fecha_mov','>=',$fecin)
+								  ->where('fecha_mov','<=',$fecfin)
+								  ->count();
+
+
+				
+
+								@endphp
+								@if($bus_ven > '0')
+
+									@php
+									
+	            $calcular_saldo= DB::table("movimientos_productos")
+	          ->select(
+	                    DB::raw("(SELECT SUM(cantidad) FROM movimientos_productos
+	                                WHERE mov_tip='I' AND fecha_mov<'".$fecin."' AND IdProducto_rel='".$pro->IdProducto."'  ) as Ingresos"),
+	                    DB::raw("(SELECT SUM(cantidad) FROM movimientos_productos
+	                                WHERE mov_tip='E' AND fecha_mov<'".$fecin."' AND IdProducto_rel='".$pro->IdProducto."' ) as Egresos"),
+	                    DB::raw("(SELECT SUM(cantidad) FROM movimientos_productos
+	                                WHERE mov_tip='EI' AND fecha_mov<'".$fecin."' AND IdProducto_rel='".$pro->IdProducto."' ) as Anula"))
+	          ->where('id_empresa_negocio',Auth::user()->id_empresa_negocio)
+	          ->where('IdProducto_rel',$pro->IdProducto)
+	           ->where('id_almacen','=',$almacen)
+	          ->groupby('IdProducto_rel')
+	          ->first();
+
+      if(!empty($calcular_saldo)){
+          $saldo_anterior = ($calcular_saldo->Ingresos-($calcular_saldo->Egresos+$calcular_saldo->Anula)); 
+      }
+
+									@endphp
+
+	    
+								<tr>
+
+									<td><strong>CODIGO EXISTENCIA</strong></td>
+									<td colspan="12"><strong>{{$pro->procod}}</strong></td>
+								</tr>
+									<tr>
+									<td><strong>DESCRIPCION</strong></td>
+									<td colspan="12"><strong>{{$pro->pronom}}</strong></td>
+								</tr>
+									<tr>
+									<td><strong>CODIGO DE UNIDAD DE MEDIDA</strong></td>
+									<td colspan="12"><strong>{{$pro->umecod}}</strong></td>
+								</tr>
+									@if($saldo_anterior!=0)
+								<tr>
+
+									    <td></td>
+									    <td></td>
+										<td></td>
+										<td></td>
+										<td>SALDO ANTERIOR</td>
+									
+
+								
+							
+									
+
+										<td>0.000</td>
+									
+									
+										
+										<td>0.000</td>
+									
+								 	   	<td>{{number_format($saldo_anterior,'3','.',',')}}</td>
+						
+								</tr>
+								@endif
+								@php
+
+								$i=0;
+
+								@endphp
+
+								@foreach($movimientos as $c)
+								@if(($c->IdProducto_rel == $pro->IdProducto) || ($c->IdProducto == $pro->IdProducto))
+								
+								@php
+
+										if($i==0){
+											if($c->descripcion=='STOCK_INICIAL'){
+											 	$saldo = $c->cantidad;
+							                	$stock = $saldo;
+											}else{
+												$saldo = $saldo_anterior;
+
+									            if($c->mov_tip=='I'){
+									                $stock = $saldo+$c->cantidad;
+									            }
+
+									            if($c->mov_tip=='E'){
+									                $stock = $saldo - $c->cantidad;
+									            }
+							        		}
+
+							            }else{
+
+							            
+							            if($c->mov_tip=='I'){
+
+							                $stock = $saldo+$c->cantidad;
+
+
+							            }
+
+							            if($c->mov_tip=='E'){
+
+							                $stock = $saldo - $c->cantidad;
+
+
+							            }
+							        }
+
+
+								@endphp
+
+								<tr>
+
+									    <td>{{$c->fecha_mov}}</td>
+									    <td>{{$c->tdocod}}</td>
+										<td>{{$c->serie}}</td>
+										<td>{{$c->numero}}</td>
+										<td>{{$c->cliente}}</td>
+									
+										
+
+									@if($c->mov_tip=='E')
+									
+										<td>0.000</td>
+									
+										<td>{{number_format($c->cantidad,'3','.',',')}}</td>
+									
+									@elseif($c->mov_tip=='I')
+
+										<td>{{number_format($c->cantidad,'3','.',',')}}</td>
+									
+									
+										
+										<td>0.000</td>
+									@endif
+									
+								 	   	<td>{{number_format($stock,'3','.',',')}}</td>
+								
+
+								
+									@php
+										 $saldo = $stock;
+            							 $i = $i+1;
+									@endphp
+								</tr>
+									@endif
+								@endforeach
+							
+								@endif
+								@endforeach
+							
+
+							</tbody>
+						</table>

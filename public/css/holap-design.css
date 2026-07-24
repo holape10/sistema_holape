@@ -1,0 +1,111 @@
+/* public/css/holap-design.css */
+
+/* Cajas y Paneles */
+.shadow-box { 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important; 
+    border-radius: 8px !important; 
+    border-top: none !important; 
+    background: #fff; 
+}
+
+/* Encabezados principales */
+.custom-header { 
+    background-color: #2c3e50 !important; 
+    color: white !important; 
+    border-radius: 8px 8px 0 0 !important; 
+}
+.custom-header font, .custom-header strong {
+    color: white !important;
+}
+
+/* Sub-encabezados de tablas */
+.custom-subheader { 
+    background-color: #34495e !important; 
+    color: white !important; 
+    font-size: 10pt; 
+}
+
+/* Botones */
+.btn-elegant { 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15); 
+    transition: all 0.3s ease; 
+    border-radius: 4px; 
+}
+.btn-elegant:hover { 
+    transform: translateY(-1px); 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+}
+
+/* Tablas globales */
+.table-hover tbody tr:hover { 
+    background-color: #f8f9fa !important; 
+    transition: background-color 0.3s; 
+}
+.table-vertical-align th, .table-vertical-align td { 
+    vertical-align: middle !important; 
+}
+
+/* Alertas */
+.alert-elegant { 
+    border-radius: 8px !important; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08) !important; 
+    border: none !important; 
+}
+
+/* =========================================
+   MODALES ELEGANTES - HOLA P
+   ========================================= */
+
+/* Contenedor principal del modal (sombra 3D y bordes curvos) */
+.modal-content {
+    border-radius: 12px !important;
+    border: none !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+    overflow: hidden; /* Evita que el fondo del header se salga de las curvas */
+}
+
+/* Cabecera del modal (Azul corporativo) */
+.modal-header {
+    background-color: #2c3e50 !important; 
+    color: white !important;
+    border-bottom: none !important;
+    padding: 18px 20px !important;
+}
+
+/* Título del modal */
+.modal-header .modal-title, 
+.modal-header h4,
+.modal-header h4 font {
+    font-weight: bold !important;
+    color: white !important;
+    margin: 0;
+}
+
+/* Botón de cerrar (la clásica 'X' en la esquina) */
+.modal-header .close {
+    color: white !important;
+    opacity: 0.7 !important;
+    text-shadow: none !important;
+    font-size: 24px !important;
+    margin-top: -4px !important;
+    transition: all 0.2s ease;
+}
+
+.modal-header .close:hover {
+    opacity: 1 !important;
+    transform: scale(1.2);
+}
+
+/* Cuerpo del modal */
+.modal-body {
+    padding: 25px 20px !important;
+    background-color: #ffffff !important;
+}
+
+/* Pie del modal (Donde van los botones de Guardar/Cancelar) */
+.modal-footer {
+    background-color: #f8f9fa !important;
+    border-top: 1px solid #e9ecef !important;
+    border-radius: 0 0 12px 12px !important;
+    padding: 15px 20px !important;
+}

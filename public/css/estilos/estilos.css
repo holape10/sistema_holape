@@ -1,0 +1,46 @@
+
+.select2-container--default .select2-dropdown{
+
+  width: 1000px !important;
+
+
+}
+
+
+.select2-container--default .select2-results > .select2-results__options {
+max-height: 700px;
+overflow-y: auto;
+font-weight: bold;
+
+}
+
+
+.select2-results > .select2-results__options > li {
+margin-bottom: 10px;
+
+}
+
+.text-number{
+	text-align:right;
+}
+
+
+.dashed {
+  border-top: 3px dashed #bbb;
+}
+
+
+.dotted {
+  border-top: 3px dotted #bbb;
+}
+
+
+.solid {
+  border-top: 3px solid #bbb;
+}
+
+
+.rounded {
+  border-top: 8px solid #bbb;
+  border-radius: 5px;
+}
