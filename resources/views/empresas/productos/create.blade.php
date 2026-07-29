@@ -491,17 +491,7 @@
                     </select>
                 </div>
             </div>
-                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                <div class="form-group form-group-sm">
-                    <label for="stock_min">Stock Inicial</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default"><span class="fa fa-cart-arrow-down"></span></button>
-                        </span>
-                        <input type="number" name="stock_inicial" id="stock_inicial" value="0"  class="form-control" placeholder="">
-                    </div>
-                </div>
-            </div>
+                
 
             <div class="col-lg-3 col-md-4 col-sm-4 col-xs-4">
                 <div class="form-group form-group-sm">
@@ -520,17 +510,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                <div class="form-group form-group-sm">
-                    <label for="stock_min">Stock Inicial</label>
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default"><span class="fa fa-cart-arrow-down"></span></button>
-                        </span>
-                        <input type="number" name="stock_inicial" id="stock_inicial" value="0"  class="form-control" placeholder="">
-                    </div>
-                </div>
-            </div>
+            
 
                  
 

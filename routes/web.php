@@ -1527,3 +1527,8 @@ Route::post('transportes/vehiculos', 'UnidadController@storeVehiculo')->name('ve
 Route::post('transportes/choferes', 'UnidadController@storeChofer')->name('choferes.store');
 
 Route::get('transportes/consultar-doc', 'TransporteController@consultarDocumento')->name('transportes.consultardoc');
+
+Route::prefix('ocr')->group(function () {
+    Route::get('/', 'OcrController@index')->name('ocr.index');
+    Route::post('/process', 'OcrController@process')->name('ocr.process');
+});

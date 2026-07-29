@@ -35,6 +35,11 @@ class Kernel extends ConsoleKernel
                  ->at('11:00')      // 11:00 AM - Horario laboral
                  ->withoutOverlapping()
                  ->runInBackground();
+
+        $schedule->command('system:truncate-cola-impresion')
+             ->dailyAt('05:00')
+             ->withoutOverlapping()
+             ->runInBackground();
     }
 
     /**

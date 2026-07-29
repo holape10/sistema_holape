@@ -107,57 +107,21 @@ class ComprobantesController extends Controller
     }
 
    public function monitoreo(Request $request)
-    {
-        $id_empresa_negocio = Auth::user()->id_empresa_negocio;
+{
+    $query = DB::table('cola_impresion as c')
+        ->select('c.id', 'c.impresora', 'c.estado', 'c.contenido');
 
-        // 1. Iniciamos la consulta base uniendo con usuarios y mesas
-        $query = DB::table('cola_impresion as c')
-            ->select(
-                'c.id',
-                'c.created_at',
-                'c.impresora',
-                'c.estado',
-                'c.mesa as mesa_original', // Guardamos el valor original por si es 'Llevar' o 'Delivery'
-                'c.usuario as usuario_original',
-                'u.name as usuario_nombre',
-                'u.apeusu as usuario_apellido',
-                'm.mes_nom as mesa_nombre'
-            )
-            ->leftJoin('users as u', function($join) {
-                $join->on(DB::raw('CAST(c.usuario AS UNSIGNED)'), '=', 'u.IdUsuario')
-                     ->whereRaw('c.usuario REGEXP "^[0-9]+$"'); // Evita errores si hay datos antiguos de texto plano
-            })
-            ->leftJoin('mesas as m', function($join) {
-                $join->on(DB::raw('CAST(c.mesa AS UNSIGNED)'), '=', 'm.mes_id')
-                     ->whereRaw('c.mesa REGEXP "^[0-9]+$"'); // Evita errores si almacena 'Llevar' o 'Delivery'
-            });
-
-        // 2. Aplicamos Filtro de Búsqueda por Usuario (Busca en ID o Nombre/Apellido si viene texto)
-        if ($request->filled('buscar_usuario')) {
-            $buscarUsuario = $request->input('buscar_usuario');
-            $query->where(function($q) use ($buscarUsuario) {
-                $q->where('c.usuario', $buscarUsuario)
-                  ->orWhere('u.name', 'LIKE', "%{$buscarUsuario}%")
-                  ->orWhere('u.apeusu', 'LIKE', "%{$buscarUsuario}%");
-            });
-        }
-
-        // 3. Aplicamos Filtro de Búsqueda por Mesa / Servicio (Busca en ID, Nombre de mesa o Tipo de Servicio)
-        if ($request->filled('buscar_mesa')) {
-            $buscarMesa = $request->input('buscar_mesa');
-            $query->where(function($q) use ($buscarMesa) {
-                $q->where('c.mesa', $buscarMesa)
-                  ->orWhere('m.mes_nom', 'LIKE', "%{$buscarMesa}%");
-            });
-        }
-
-        // 4. Obtenemos los últimos 100 registros filtrados
-        $tickets = $query->orderBy('c.id', 'desc')
-            ->limit(100)
-            ->get();
-
-        return view('empresas.comprobantes.monitoreo', compact('tickets'));
+    // Si solo tienes esas columnas en cola_impresion, filtra por ID de impresión o Impresora
+    if ($request->filled('buscar_impresora')) {
+        $query->where('c.impresora', 'LIKE', "%{$request->input('buscar_impresora')}%");
     }
+
+    $tickets = $query->orderBy('c.id', 'desc')
+        ->limit(100)
+        ->get();
+
+    return view('empresas.comprobantes.monitoreo', compact('tickets'));
+}
 
     public function reimprimir($id)
     {
@@ -166,8 +130,7 @@ class ComprobantesController extends Controller
             $actualizado = DB::table('cola_impresion')
                 ->where('id', $id)
                 ->update([
-                    'estado' => 'pendiente',
-                    'updated_at' => \Carbon\Carbon::now()
+                    'estado' => '0'                    
                 ]);
 
             if ($actualizado) {

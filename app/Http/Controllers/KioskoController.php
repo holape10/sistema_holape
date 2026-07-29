@@ -4121,7 +4121,7 @@ public function getPedidoDetails($pedido_id)
                         'stock_inicial' => 0.00,
                         'serie' => null,
                         'numero' => null,
-                        'tdocod' => 'ANUL',
+                        'tdocod' => '83',
                         'tipo' => '4', // Tipo de movimiento para anulación/ajuste
                         'id_empresa_negocio' => $id_empresa_negocio,
                         'id_almacen' => $detalle->id_almacen_pro, // Usar el almacén del detalle
@@ -5472,7 +5472,7 @@ public function getPedidoDetails($pedido_id)
                 'stock_inicial' => 0.00, // No es el stock inicial real, se usa para el movimiento
                 'serie' => null,
                 'numero' => null,
-                'tdocod' => 'ANUL', // Tipo de documento para anulación
+                'tdocod' => '83', // Tipo de documento para anulación
                 'tipo' => '4', // Tipo de movimiento para anulación/ajuste
                 'id_empresa_negocio' => Auth::user()->id_empresa_negocio,
                 'id_almacen' => $detalle_pedido->id_almacen_pro,
@@ -5671,7 +5671,7 @@ public function getPedidoDetails($pedido_id)
                     'IdCpe_cabecera' => null,
                     'serie' => null,
                     'numero' => null,
-                    'tdocod' => 'ANUL', // Anulación
+                    'tdocod' => '83', // Anulación
                     'tipo' => '4', // Tipo de ajuste
                     'mov_tip' => 'I', // Tipo de operación: Ingreso (reversión de egreso)
                     'id_empresa_negocio' => $id_empresa_negocio,
@@ -5729,7 +5729,7 @@ public function getPedidoDetails($pedido_id)
                         'IdCpe_cabecera' => null,
                         'serie' => null,
                         'numero' => null,
-                        'tdocod' => 'ANUL',
+                        'tdocod' => '83',
                         'tipo' => '4',
                         'mov_tip' => 'I',
                         'id_empresa_negocio' => $id_empresa_negocio,
@@ -5787,7 +5787,7 @@ public function getPedidoDetails($pedido_id)
                             'IdCpe_cabecera' => null,
                             'serie' => null,
                             'numero' => null,
-                            'tdocod' => 'ANUL',
+                            'tdocod' => '83',
                             'tipo' => '4',
                             'mov_tip' => 'I',
                             'id_empresa_negocio' => $id_empresa_negocio,
@@ -5845,7 +5845,7 @@ public function getPedidoDetails($pedido_id)
                                 'IdCpe_cabecera' => null,
                                 'serie' => null,
                                 'numero' => null,
-                                'tdocod' => 'ANUL',
+                                'tdocod' => '83',
                                 'tipo' => '4',
                                 'mov_tip' => 'I',
                                 'id_empresa_negocio' => $id_empresa_negocio,

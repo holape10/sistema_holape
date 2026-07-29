@@ -46,11 +46,8 @@
                             <th class="text-center" style="width: 40px;">
                                 <input type="checkbox" id="check-todos" class="form-check-input shadow-none" style="cursor: pointer;">
                             </th>
-                            <th>ID</th>
-                            <th>Fecha / Hora</th>
-                            <th>Impresora</th>
-                            <th>Mesa / Servicio</th>
-                            <th>Usuario</th>
+                            <th>ID</th>                            
+                            <th>Impresora</th>                            
                             <th>Estado</th>
                             <th class="text-center">Acción</th>
                         </tr>
@@ -67,25 +64,10 @@
                             <td class="text-center">
                                 <input type="checkbox" class="form-check-input check-individual shadow-none" value="{{ $t->id }}" style="cursor: pointer;">
                             </td>
-                            <td>{{ $t->id }}</td>
-                            <td>{{ \Carbon\Carbon::parse($t->created_at)->format('d/m/Y g:i a') }}</td>
+                            <td>{{ $t->id }}</td>                            
                             <td><span class="badge bg-secondary text-uppercase">{{ $t->impresora }}</span></td>
                             
-                            <td>
-                                @if(!empty($t->mesa_nombre))
-                                    <span class="fw-bold text-dark">{{ $t->mesa_nombre }}</span>
-                                @else
-                                    <span class="badge bg-info text-uppercase">{{ $t->mesa_original ?? 'Caja / General' }}</span>
-                                @endif
-                            </td>
-
-                            <td>
-                                @if(!empty($t->usuario_nombre))
-                                    {{ $t->usuario_nombre }} {{ $t->usuario_apellido }}
-                                @else
-                                    {{ $t->usuario_original ?? 'Sistema' }}
-                                @endif
-                            </td>
+                          
 
                             <td class="estado-celda">
                                 @if($t->estado == 'pendiente')

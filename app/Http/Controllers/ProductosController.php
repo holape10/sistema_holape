@@ -982,12 +982,12 @@ class ProductosController extends Controller
         $costo_pre = $request->get('costo');
         $flete = $request->get('txt_flete');
         $costo_total = $request->get('costo_total');
-        $peso = $request->get('txt_peso');
+        
         $precio = $request->get('precio');
         $precio2 = $request->get('precio2');
         $precio3 = $request->get('precio3');
         $factor = $request->get('factor');
-        $prog_id = $request->get('prog_id');
+        
 
         $stock = $request->get('stock_inicial');
 
@@ -1000,16 +1000,13 @@ class ProductosController extends Controller
         $productos->cod_producto_sunat = $request->get('cod_producto_sunat');
         $productos->marca = $request->get('marca');
         $productos->modelo = $request->get('modelo');
-        $productos->dias_garantia = $request->get('dias_garantia');
         $productos->tipo_codigo = $request->get('tipo_codigo');
-        $productos->talla = $request->get('talla');
 
         $productos->requiere_lote_vencimiento = $request->has('requiere_lote_vencimiento');
         $productos->tiene_entrada = $request->has('tiene_entrada') ? 1 : 0;
         $productos->genera_puntos = $request->has('genera_puntos') ? 1 : 0;
 
         $productos->codigo_barra = $codigoean13;
-        $productos->color = $request->get('color');
         $productos->umecod = $request->get('txt_umecod');
         $productos->moncod = $request->get('txt_moncod');
 
@@ -1019,33 +1016,30 @@ class ProductosController extends Controller
         $productos->haber_nc = $request->get('debe');
 
         $productos->costofijo = $request->get('txt_costofijo');
-        $productos->lote = $request->get('lote');
-        $productos->vencimiento = $request->get('fechavencimiento');
         $productos->propun = $request->get('txt_propun');
         $productos->propun1 = $request->get('txt_propun2');
         $productos->propun2 = $request->get('txt_propun3');
         $productos->stock_min = $request->get('stock_min');
         $productos->factor = $request->get('factor_pro');
 
-        $productos->stockinicial = $request->get('stock_inicial');
+        
 
         if($request->get('promocion')=='4'){
             $productos->factor_cons = $request->get('factor_cons');
             $productos->umecod_cons = $request->get('umecod_cons');
         }
 
-        $productos->lab_id = $request->get('lab_id');
+        
         if($request->get('icbper')=='1'){
              $productos->mon_icbper = $dat_emp->icbper;
         }
         $productos->icbper = $request->get('icbper');
-        $productos->prog_id = $prog_id;
         $productos->comision = $request->get('comision');
         $productos->ubicacion = $request->get('ubicacion');
         $productos->promocion = $request->get('promocion');
         $productos->costo = $costo;
         $productos->costo_total = $costo_total;
-        $productos->peso = $peso;
+        
         $productos->flete = $flete;
         $productos->tipo ='1';
         if($request->get('promocion')=='2'){
@@ -1158,8 +1152,7 @@ class ProductosController extends Controller
                     $objpresentacion->modelo = $productos->modelo;
                     $objpresentacion->color =  $productos->color;
                     $objpresentacion->umecod = $pre;
-                    $objpresentacion->moncod = $productos->moncod;
-                    $objpresentacion->lab_id = $productos->lab_id;
+                    $objpresentacion->moncod = $productos->moncod;                    
                     $objpresentacion->propun = $precio[$i];
                     $objpresentacion->icbper = $productos->icbper;
                     $objpresentacion->promocion = $productos->promocion;
@@ -1417,8 +1410,7 @@ class ProductosController extends Controller
                 $objpresentacion->modelo = $producto_principal->modelo;
                 $objpresentacion->color = $producto_principal->color;
                 $objpresentacion->umecod = $pre_umecod;
-                $objpresentacion->moncod = $producto_principal->moncod;
-                $objpresentacion->lab_id = $producto_principal->lab_id;
+                $objpresentacion->moncod = $producto_principal->moncod;                
                 $objpresentacion->propun = $precios_data[$i];
                 $objpresentacion->propun1 = $precios2_data[$i] ?? null; // Si tienes precio2 para presentaciones
                 $objpresentacion->icbper = $producto_principal->icbper;
@@ -1525,7 +1517,7 @@ class ProductosController extends Controller
         $costo_pre = $request->get('costo');
         $flete = $request->get('txt_flete');
         $costo_total = $request->get('costo_total');
-        $peso = $request->get('txt_peso');
+        
 
         $productos= productos::findOrFail($id);
         $productos->codigo_barra = $codigoean13;
@@ -1536,21 +1528,19 @@ class ProductosController extends Controller
         $productos->cod_producto_sunat = $request->get('cod_producto_sunat');
         $productos->marca = $request->get('marca');
         $productos->costo = $costo;
-        $productos->peso = $peso;
+        
         $productos->flete = $flete;
         $productos->costo_total = $costo_total;
         $productos->costofijo = $request->get('txt_costofijo');
 
-        $productos->lab_id = $request->get('lab_id');
+        
          $productos->tipo_codigo = $request->get('tipo_codigo');
-       // $productos->color = $request->get('color');
+       
         $productos->cat_id = $request->get('cat_id');
         $productos->subcat_id = $request->get('subcat_id');
-        $productos->prog_id = $request->get('prog_id');
+       
         $productos->tip_pro_id = $request->get('tip_pro_id');
-        $productos->modelo = $request->get('modelo');
-        $productos->dias_garantia = $request->get('dias_garantia');
-        $productos->talla = $request->get('talla');
+        $productos->modelo = $request->get('modelo');       
 
         $productos->requiere_lote_vencimiento = $request->has('requiere_lote_vencimiento');
         $productos->tiene_entrada = $request->has('tiene_entrada') ? 1 : 0;
@@ -1565,10 +1555,9 @@ class ProductosController extends Controller
         $productos->debe_nc = $request->get('haber');
         $productos->haber_nc = $request->get('debe');
         
-        $productos->comision = $request->get('comision');
-        $productos->lote = $request->get('lote');
+        
          $productos->factor = $request->get('factor_pro');
-        $productos->vencimiento = $request->get('fechavencimiento');
+        
         $productos->stock_min = $request->get('stock_min');
         $productos->ubicacion = $request->get('ubicacion');
         $productos->tigcod = $request->get('tigcod');
@@ -1725,19 +1714,15 @@ class ProductosController extends Controller
         ->first();
   
             $productos = DB::tABLE('productos')
-            ->select('lab_nom','productos.lab_id','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$almacen->id_almacen."' AND pro.id_empresa_negocio='".$almacen->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"))
-            ->join('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')
-            ->leftjoin('laboratorio','laboratorio.lab_id','productos.lab_id')
-          //  ->join('producto_stock','producto_stock.IdProducto','producto_empresa.IdProducto')
+            ->select('pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$almacen->id_almacen."' AND pro.id_empresa_negocio='".$almacen->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"))
+            ->join('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')                      
           ->leftjoin('marcas','marcas.mar_id','productos.marca')
         ->where(function ($query) use($search){
                 $query->where('pronom','like','%'.$search.'%')
           ->orwhere('procod',$search);
           })
             ->where('tipo','1')
-            ->where('promocion','!=','2')
-           // ->where('producto_empresa.id_empresa_negocio',Auth::user()->id_empresa_negocio)
-           // ->where('id_almacen',$almacen->id_almacen)
+            ->where('promocion','!=','2')           
             ->groupby('productos.IdProducto')
             ->orderby('productos.pronom')
             ->orderby('productos.umecod')
@@ -1813,10 +1798,9 @@ class ProductosController extends Controller
 
   
             $productos = DB::tABLE('productos')
-            ->select('costo_total','lab_nom','productos.lab_id','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$bus_alm->id_almacen."' AND pro.id_empresa_negocio='".$bus_alm->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"))
+            ->select('costo_total','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$bus_alm->id_almacen."' AND pro.id_empresa_negocio='".$bus_alm->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"))
             ->join('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')
-              ->leftjoin('laboratorio','laboratorio.lab_id','productos.lab_id')
-          //  ->join('producto_stock','producto_stock.IdProducto','producto_empresa.IdProducto')
+              
           ->leftjoin('marcas','marcas.mar_id','productos.marca')
         ->where(function ($query) use($search){
                 $query->where('pronom','like','%'.$search.'%')
@@ -1824,8 +1808,7 @@ class ProductosController extends Controller
           })
             ->where('tipo','1')
             ->where('promocion','!=','2')
-           // ->where('producto_empresa.id_empresa_negocio',Auth::user()->id_empresa_negocio)
-           // ->where('id_almacen',$almacen->id_almacen)
+           
             ->groupby('productos.IdProducto')
             ->orderby('productos.pronom')
             ->orderby('productos.umecod')
@@ -1911,9 +1894,8 @@ class ProductosController extends Controller
       
 
         $productos = DB::tABLE('productos')
-        ->select('acom','cat_sig','lab_nom','productos.lab_id','factor','precio3','productos.procod','productos.pronom','productos.propun','productos.IdProducto','productos.umecod','productos.promocion','productos.color','productos.imagenproducto','precio','precio2',DB::raw("(SELECT stock FROM producto_stock as pro WHERE pro.IdProducto ='".$id."' and pro.id_almacen='".$almacen->id_almacen."'  and pro.id_empresa_negocio='".Auth::user()->id_empresa_negocio."') as stock"),DB::raw("(SELECT umenom FROM unidad_medida as um WHERE um.umecod=productos.umecod) as umenom"))
-        ->leftjoin('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')
-          ->leftjoin('laboratorio','laboratorio.lab_id','productos.lab_id')
+        ->select('acom','cat_sig','factor','precio3','productos.procod','productos.pronom','productos.propun','productos.IdProducto','productos.umecod','productos.promocion','productos.color','productos.imagenproducto','precio','precio2',DB::raw("(SELECT stock FROM producto_stock as pro WHERE pro.IdProducto ='".$id."' and pro.id_almacen='".$almacen->id_almacen."'  and pro.id_empresa_negocio='".Auth::user()->id_empresa_negocio."') as stock"),DB::raw("(SELECT umenom FROM unidad_medida as um WHERE um.umecod=productos.umecod) as umenom"))
+        ->leftjoin('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')          
         ->where(function ($query) use ($id) {
              
                     $query->where('productos.pro_rel',$id)
@@ -1954,9 +1936,9 @@ class ProductosController extends Controller
         $rucemp = trim(Auth::user()->IdEmpresa);
 
         $productos = DB::tABLE('productos')
-         ->select('lab_nom','productos.lab_id','factor','productos.procod','productos.pronom','productos.propun','productos.IdProducto','productos.umecod','productos.promocion','productos.color','productos.imagenproducto','precio','precio2',DB::raw("(SELECT stock FROM producto_stock as pro WHERE pro.IdProducto ='".$id."' and pro.id_almacen='".$almacen."' and pro.id_empresa_negocio='".$sucursal."') as stock"),'costo')
+         ->select('lab_nom','factor','productos.procod','productos.pronom','productos.propun','productos.IdProducto','productos.umecod','productos.promocion','productos.color','productos.imagenproducto','precio','precio2',DB::raw("(SELECT stock FROM producto_stock as pro WHERE pro.IdProducto ='".$id."' and pro.id_almacen='".$almacen."' and pro.id_empresa_negocio='".$sucursal."') as stock"),'costo')
         ->join('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')
-          ->leftjoin('laboratorio','laboratorio.lab_id','productos.lab_id')
+          
         ->where(function ($query) use ($id) {
              
                           $query->where('productos.pro_rel',$id)
@@ -2089,7 +2071,7 @@ class ProductosController extends Controller
             DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel = productos.IdProducto) as cont_pre")
         )
         ->join('producto_empresa', 'producto_empresa.IdProducto', '=', 'productos.IdProducto')
-        ->leftJoin('laboratorio', 'laboratorio.lab_id', '=', 'productos.lab_id')
+        
         ->leftJoin('marcas', 'marcas.mar_id', '=', 'productos.marca')
         ->where(function ($query) use ($search) {
             $query->where('productos.pronom', 'like', '%' . $search . '%')
@@ -2203,10 +2185,9 @@ class ProductosController extends Controller
 
   
             $productos = DB::tABLE('productos')
-            ->select('costo_total','lab_nom','productos.lab_id','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$bus_alm->id_almacen."' AND pro.id_empresa_negocio='".$bus_alm->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"))
+            ->select('costo_total','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$bus_alm->id_almacen."' AND pro.id_empresa_negocio='".$bus_alm->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"))
             ->join('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')
-            ->leftjoin('laboratorio','laboratorio.lab_id','productos.lab_id')
-          //  ->join('producto_stock','producto_stock.IdProducto','producto_empresa.IdProducto')
+            
           ->leftjoin('marcas','marcas.mar_id','productos.marca')
         ->where(function ($query) use($search){
                 $query->where('pronom','like','%'.$search.'%')
@@ -2318,10 +2299,9 @@ class ProductosController extends Controller
 
   
             $productos = DB::tABLE('productos')
-            ->select('costo_total','lab_nom','productos.lab_id','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$bus_alm->id_almacen."' AND pro.id_empresa_negocio='".$bus_alm->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"))
+            ->select('costo_total','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$bus_alm->id_almacen."' AND pro.id_empresa_negocio='".$bus_alm->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"))
             ->join('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')
-            ->leftjoin('laboratorio','laboratorio.lab_id','productos.lab_id')
-          //  ->join('producto_stock','producto_stock.IdProducto','producto_empresa.IdProducto')
+            
           ->leftjoin('marcas','marcas.mar_id','productos.marca')
         ->where(function ($query) use($search){
                 $query->where('pronom','like','%'.$search.'%')
@@ -2435,10 +2415,9 @@ class ProductosController extends Controller
 
   
             $productos = DB::tABLE('productos')
-            ->select('costo_total','lab_nom','productos.lab_id','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$bus_alm->id_almacen."' AND pro.id_empresa_negocio='".$bus_alm->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"),'icbper','mon_icbper')
+            ->select('costo_total','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$bus_alm->id_almacen."' AND pro.id_empresa_negocio='".$bus_alm->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"),'icbper','mon_icbper')
             ->join('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')
-            ->leftjoin('laboratorio','laboratorio.lab_id','productos.lab_id')
-          //  ->join('producto_stock','producto_stock.IdProducto','producto_empresa.IdProducto')
+            
           ->leftjoin('marcas','marcas.mar_id','productos.marca')
         ->where(function ($query) use($search){
                 $query->where('codigo_barra',$search);
@@ -2792,10 +2771,9 @@ class ProductosController extends Controller
 
   
             $productos = DB::tABLE('productos')
-            ->select('lab_nom','productos.lab_id','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$almacen->id_almacen."' AND pro.id_empresa_negocio='".$almacen->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"))
+            ->select('pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$almacen->id_almacen."' AND pro.id_empresa_negocio='".$almacen->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"))
             ->join('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')
-            ->leftjoin('laboratorio','laboratorio.lab_id','productos.lab_id')
-          //  ->join('producto_stock','producto_stock.IdProducto','producto_empresa.IdProducto')
+            
           ->leftjoin('marcas','marcas.mar_id','productos.marca')
         ->where(function ($query) use($cat_id){
                 $query->where('cat_id',$cat_id);
@@ -3673,8 +3651,7 @@ class ProductosController extends Controller
                         'id_empresa_negocio' => $empresaNegocio,
                         'cat_id' => null,
                         'subcat_id' => null,
-                        'tip_pro_id' => null,
-                        'peso' => 0,
+                        'tip_pro_id' => null,                        
                         'flete' => 0,
                         'pro_rel' => null,
                     ];
@@ -4377,10 +4354,9 @@ class ProductosController extends Controller
         ->where('id_almacen',$id_almacen)
         ->first();
             $catalogo = DB::tABLE('productos')
-            ->select('imagenproducto','costo_total','lab_nom','productos.lab_id','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$bus_alm->id_almacen."' AND pro.id_empresa_negocio='".$bus_alm->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"),'icbper','mon_icbper')
+            ->select('imagenproducto','costo_total','pro_rel','costo','mar_nom','procod','pronom','propun','productos.IdProducto','umecod','promocion','color','imagenproducto','precio2','precio3',DB::raw("(SELECT stock FROM producto_stock as pro WHERE productos.IdProducto = pro.IdProducto AND id_almacen='".$bus_alm->id_almacen."' AND pro.id_empresa_negocio='".$bus_alm->id_empresa_negocio."') as stock"),'precio',DB::raw("(SELECT count(*) FROM productos as pro WHERE pro.pro_rel =  productos.IdProducto) as cont_pre"),'icbper','mon_icbper')
             ->join('producto_empresa','producto_empresa.IdProducto','productos.IdProducto')
-            ->leftjoin('laboratorio','laboratorio.lab_id','productos.lab_id')
-          //  ->join('producto_stock','producto_stock.IdProducto','producto_empresa.IdProducto')
+            
           ->leftjoin('marcas','marcas.mar_id','productos.marca')
         ->where(function ($query) use($search){
                 $query->where('pronom','like','%'.$search.'%')

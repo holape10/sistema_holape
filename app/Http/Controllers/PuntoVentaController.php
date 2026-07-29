@@ -3897,7 +3897,7 @@ public function restaurantpunto(Request $request)
             $detalle->procod = $codproducto;
             $detalle->IdProducto = $codpro->IdProducto;
             $detalle->IdProducto_rel = $id_prod;
-            $detalle->cdepsu = "";
+            
             $detalle->cdedes = $detpro[$index];
             $detalle->pronomobs = $pronomobs[$index];
             $detalle->costo = $codpro->costo;
@@ -3994,7 +3994,7 @@ public function restaurantpunto(Request $request)
             $detalle->IdCpe_cabecera =  $cabecera->IdCpe_cabecera;
             $detalle->umecod = $unidades[$index];
             $detalle->cdecan = $cantidades[$index];
-            $detalle->cdepsu = "";
+            
             $detalle->cdedes = $detpro[$index];
             $detalle->desc_mon = $descuento[$index];
             $detalle->tigcod = $sucursal->tip_igv_pred;
@@ -5181,7 +5181,7 @@ $detalle->cdecan = $cantidades[$index];
 $detalle->procod = $codproducto;
 $detalle->IdProducto = $codpro->IdProducto;
 $detalle->IdProducto_rel = $id_prod;
-$detalle->cdepsu = "";
+
 $detalle->cdedes = $detpro[$index];
 $detalle->pronomobs = $pronomobs[$index];
 $detalle->costo = $codpro->costofijo;
@@ -5276,7 +5276,7 @@ if($sucursal->tipo_desc=='1'){
     $detalle->IdCpe_cabecera =  $cabecera->IdCpe_cabecera;
     $detalle->umecod = $unidades[$index];
     $detalle->cdecan = $cantidades[$index];
-    $detalle->cdepsu = "";
+    
     $detalle->cdedes = $detpro[$index];
     $detalle->desc_mon = $descuento[$index];
 
@@ -5708,7 +5708,7 @@ foreach($proid as $index => $id) {
       $detalle->procod = $codproducto;
       $detalle->IdProducto = $codpro->IdProducto;
 
-      $detalle->cdepsu = "";
+      
       $detalle->cdedes = $detpro[$index];
       $detalle->pronomobs = $pronomobs[$index];
       $detalle->costo = $codpro->costofijo;
@@ -5749,7 +5749,7 @@ foreach($proid as $index => $id) {
 
 
 
-    $detalle->cdepsu = "";
+    
     $detalle->cdedes = $detpro[$index];
     $detalle->pronomobs = $pronomobs[$index];
     $detalle->costo ='0';
@@ -6061,7 +6061,7 @@ public function actualizarpedido(Request $request)
         $detalle->cdecan = $cantidades[$index];
         $detalle->procod = $codproducto;
         $detalle->IdProducto = $codpro->IdProducto;
-        $detalle->cdepsu = "";
+        
         $detalle->cdedes = $detpro[$index];
         $detalle->pronomobs = $pronomobs[$index];
         $detalle->costo = $codpro->costofijo;
@@ -6098,7 +6098,7 @@ public function actualizarpedido(Request $request)
       $detalle->cdecan = $cantidades[$index];
       $detalle->procod = $codproducto;
       $detalle->IdProducto = $codpro->IdProducto;
-      $detalle->cdepsu = "";
+      
       $detalle->cdedes = $detpro[$index];
       $detalle->pronomobs = $pronomobs[$index];
       $detalle->costo = $codpro->costofijo;
@@ -6140,7 +6140,7 @@ public function actualizarpedido(Request $request)
         $detalle->umecod = $unidades[$index];
         $detalle->cdecan = $cantidades[$index];
 
-        $detalle->cdepsu = "";
+        
         $detalle->cdedes = $detpro[$index];
         $detalle->pronomobs = $pronomobs[$index];
         $detalle->costo = '0';
@@ -6177,7 +6177,7 @@ public function actualizarpedido(Request $request)
       $detalle->cdecan = $cantidades[$index];
          //   $detalle->procod = $codproducto;
          //   $detalle->IdProducto = $codpro->IdProducto;
-      $detalle->cdepsu = "";
+      
       $detalle->cdedes = $detpro[$index];
       $detalle->pronomobs = $pronomobs[$index];
       $detalle->costo = '0';
@@ -7684,7 +7684,7 @@ foreach($unidades as $index => $ume ) {
     $detalle->cdecan = $cantidades[$index];
     $detalle->procod = $codproducto;
     $detalle->IdProducto = $codpro->IdProducto;
-    $detalle->cdepsu = "";
+    
     $detalle->cdedes = $detpro[$index];
     $detalle->costo = $codpro->costofijo;
     $detalle->tigcod = $codpro->tigcod;
@@ -8519,7 +8519,7 @@ if ($cabecera->vuelto!=0) {
     $detalle->cdecan = $cantidades[$index];
     $detalle->procod = $codproducto;
     $detalle->IdProducto = $codpro->IdProducto;
-    $detalle->cdepsu = "";
+    
     $detalle->cdedes = $detpro[$index];
     $detalle->pronomobs = $pronomobs[$index];
     $detalle->costo = $codpro->costo;
@@ -8789,7 +8789,7 @@ foreach($proid as $index => $id) {
     $detalle->cdecan = $cantidades[$index];
     $detalle->procod = $codproducto;
     $detalle->IdProducto = $codpro->IdProducto;
-    $detalle->cdepsu = "";
+    
     $detalle->cdedes = $detpro[$index];
     $detalle->pronomobs = $pronomobs[$index];
     $detalle->costo = $codpro->costo;
@@ -9292,7 +9292,7 @@ foreach($unidades as $index => $uni) {
     $detalle->IdCpe_cabecera =  $cabecera->IdCpe_cabecera;
     $detalle->umecod = $uni;
     $detalle->cdecan = $cantidades[$index];
-    $detalle->cdepsu = "";
+    
     $detalle->cdedes = $detpro[$index];
             //$detalle->costo = $codpro->costo;
     $detalle->tigcod = '20';
@@ -9698,7 +9698,7 @@ foreach($proid as $index => $id) {
     $detalle->cdecan = $cantidades[$index];
     $detalle->procod = $codproducto;
     $detalle->IdProducto = $codpro->IdProducto;
-    $detalle->cdepsu = "";
+    
     $detalle->cdedes = $detpro[$index];
     $detalle->pronomobs = $pronomobs[$index];
     $detalle->costo = $codpro->costofijo;
@@ -10267,7 +10267,7 @@ foreach($proid as $index => $id) {
     $detalle->cdecan = $cantidades[$index];
     $detalle->procod = $codproducto;
     $detalle->IdProducto = $codpro->IdProducto;
-    $detalle->cdepsu = "";
+    
     $detalle->cdedes = $detpro[$index];
     $detalle->pronomobs = $pronomobs[$index];
     $detalle->costo = $codpro->costofijo;
@@ -10549,7 +10549,7 @@ $codfact = $cabecera->IdCpe_cabecera;
             $detalle->cdecan = $cantidades[$index];
             $detalle->procod = $codproducto;
             $detalle->IdProducto = $codpro->IdProducto;
-            $detalle->cdepsu = "";
+            
             $detalle->cdedes = $detpro[$index];
             $detalle->costo = $codpro->costofijo;
             $detalle->tigcod = $codpro->tigcod;
@@ -10583,7 +10583,7 @@ $codfact = $cabecera->IdCpe_cabecera;
          $detalle->cdecan = $cantidades[$index];
          $detalle->procod = $codproducto;
          $detalle->IdProducto = $codpro->IdProducto;
-         $detalle->cdepsu = "";
+         
          $detalle->cdedes = $detpro[$index];
          $detalle->costo = $codpro->costofijo;
          $detalle->tigcod = $codpro->tigcod;
@@ -10921,7 +10921,7 @@ foreach($proid as $index => $id) {
         $detalle->cdecan = $cantidades[$index];
         $detalle->procod = $codproducto;
         $detalle->IdProducto = $codpro->IdProducto;
-        $detalle->cdepsu = "";
+        
         $detalle->cdedes = $detpro[$index];
         $detalle->costo = $codpro->costofijo;
         $detalle->tigcod = $codpro->tigcod;
@@ -10955,7 +10955,7 @@ foreach($proid as $index => $id) {
      $detalle->cdecan = $cantidades[$index];
      $detalle->procod = $codproducto;
      $detalle->IdProducto = $codpro->IdProducto;
-     $detalle->cdepsu = "";
+     
      $detalle->cdedes = $detpro[$index];
      $detalle->costo = $codpro->costofijo;
      $detalle->tigcod = $codpro->tigcod;
@@ -13505,7 +13505,7 @@ $detalle->cdecan = $cantidades[$index];
 $detalle->procod = $codproducto;
 $detalle->IdProducto = $codpro->IdProducto;
 $detalle->IdProducto_rel = $id_prod;
-$detalle->cdepsu = "";
+
 $detalle->cdedes = $detpro[$index];
          //   $detalle->pronomobs = $pronomobs[$index];
 $detalle->costo = $codpro->costofijo;
@@ -13610,7 +13610,7 @@ if(isset($stockprod)){
             $detalle->IdCpe_cabecera =  $cabecera->IdCpe_cabecera;
             $detalle->umecod = $unidades[$index];
             $detalle->cdecan = $cantidades[$index];
-            $detalle->cdepsu = "";
+            
             $detalle->cdedes = $detpro[$index];
             $detalle->desc_mon = $descuento[$index];
 
@@ -14454,8 +14454,7 @@ public function registrarnota(Request $request){
               $codproducto = $codpro[$index];
               $detalle->umecod = $ume;
               $detalle->cdecan = $cantidades[$index];
-              $detalle->procod = $codproducto;
-              $detalle->cdepsu = $codproducto;
+              $detalle->procod = $codproducto;              
               $detalle->cdevun = $puni[$index];
               $detalle->cdepuni = $puni[$index];
               $detalle->cdeigv = $vigv[$index];
@@ -16084,7 +16083,7 @@ $detalle->cdecan = $cantidades[$index];
 $detalle->procod = $codproducto;
 $detalle->IdProducto = $codpro->IdProducto;
 $detalle->IdProducto_rel = $id_prod;
-$detalle->cdepsu = "";
+
 $detalle->cdedes = $detpro[$index];
 $detalle->pronomobs = $pronomobs[$index];
 $detalle->costo = $codpro->costo;
@@ -16204,7 +16203,7 @@ $movimiento->save();
     $detalle->IdCpe_cabecera =  $cabecera->IdCpe_cabecera;
     $detalle->umecod = $unidades[$index];
     $detalle->cdecan = $cantidades[$index];
-    $detalle->cdepsu = "";
+    
     $detalle->cdedes = $detpro[$index];
     $detalle->desc_mon = $descuento[$index];
 
@@ -16731,7 +16730,7 @@ $detalle->cdecan = $cantidades[$index];
 $detalle->procod = $codproducto;
 $detalle->IdProducto = $codpro->IdProducto;
 $detalle->IdProducto_rel = $id_prod;
-$detalle->cdepsu = "";
+
 $detalle->cdedes = $detpro[$index];
          //   $detalle->pronomobs = $pronomobs[$index];
 $detalle->costo = $codpro->costo;
@@ -16850,7 +16849,7 @@ if(isset($stockprod)){
             $detalle->IdCpe_cabecera =  $cabecera->IdCpe_cabecera;
             $detalle->umecod = $unidades[$index];
             $detalle->cdecan = $cantidades[$index];
-            $detalle->cdepsu = "";
+            
             $detalle->cdedes = $detpro[$index];
             $detalle->desc_mon = $descuento[$index];
 
