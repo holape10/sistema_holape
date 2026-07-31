@@ -64,24 +64,7 @@
          
            </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div class="form-group form-group-sm">
-                  <label>Correo Electr&oacute;nico 2</label>
-                  <input name="clicor2" id="clicorn2" value="" class="form-control">
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div class="form-group form-group-sm">
-                  <label>Correo Electr&oacute;nico 3</label>
-                  <input name="clicor3" id="clicorn3" value="" class="form-control">
-                </div>
-              </div>
-              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <div class="form-group form-group-sm">
-                  <label>Correo Electr&oacute;nico 4</label>
-                  <input name="clicor4" id="clicorn4" value="" class="form-control">
-                </div>
-              </div>
+       
         <div class="col-lg-6">
             <div class="form-group form-group-sm">
                 <label for="clitel">Teléfono</label>

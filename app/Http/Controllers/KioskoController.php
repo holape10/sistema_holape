@@ -1395,9 +1395,9 @@ public function autocompleteClient(Request $request)
         }
 
         // Si la búsqueda es por número y no se encontraron suficientes resultados localmente, intentar con la API
-        if ($field === 'clinum' && count($results) < 10) { 
+        if ($field === 'clinum' && count($results) < 10) {  
             $api_token = 'c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09'; 
-                                                                                           
+                                                                                               
             $tipo_documento_api = '';
             $numero_documento_api = '';
 
@@ -1411,59 +1411,94 @@ public function autocompleteClient(Request $request)
             
             if (!empty($tipo_documento_api)) {
                 try {
-                    $params = json_encode([$tipo_documento_api => $numero_documento_api]);
-                    $curl = curl_init();
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => "https://apiperu.dev/api/{$tipo_documento_api}",
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_CUSTOMREQUEST => "POST",
-                        CURLOPT_SSL_VERIFYPEER => false, 
-                        CURLOPT_POSTFIELDS => $params,     
-                        CURLOPT_HTTPHEADER => [
-                            'Accept: application/json',
-                            'Content-Type: application/json',
-                            'Authorization: Bearer ' . $api_token
-                        ],     
-                    ));
-                    $response = curl_exec($curl);
-                    $err = curl_error($curl);
-                    curl_close($curl);
+                    $api_data = [];
 
-                    if ($err) {
-                        Log::error("Error de cURL al consultar API: " . $err);
+                    // SI ES RUC -> Consultamos a tu servidor propio consultas.holape.app (GET)
+                    if ($tipo_documento_api === 'ruc') {
+                        $curl = curl_init();
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => "https://consultas.holape.app/api/v1/ruc/" . $numero_documento_api,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_CUSTOMREQUEST => "GET",
+                            CURLOPT_SSL_VERIFYPEER => false,
+                            CURLOPT_HTTPHEADER => [
+                                'Accept: application/json',
+                            ],
+                        ));
+                        $response = curl_exec($curl);
+                        $err = curl_error($curl);
+                        curl_close($curl);
+
+                        if (!$err) {
+                            $api_data = json_decode($response, true);
+                        } else {
+                            Log::error("Error cURL al consultar tu API RUC propia: " . $err);
+                        }
+
                     } else {
-                        $api_data = json_decode($response, true);
+                        // SI ES DNI -> Consultamos a apiperu.dev (POST)
+                        $params = json_encode([$tipo_documento_api => $numero_documento_api]);
+                        $curl = curl_init();
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => "https://apiperu.dev/api/{$tipo_documento_api}",
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_CUSTOMREQUEST => "POST",
+                            CURLOPT_SSL_VERIFYPEER => false, 
+                            CURLOPT_POSTFIELDS => $params,     
+                            CURLOPT_HTTPHEADER => [
+                                'Accept: application/json',
+                                'Content-Type: application/json',
+                                'Authorization: Bearer ' . $api_token
+                            ],     
+                        ));
+                        $response = curl_exec($curl);
+                        $err = curl_error($curl);
+                        curl_close($curl);
 
-                        if (!empty($api_data) && isset($api_data['data'])) { 
-                            $data_from_api = $api_data['data']; 
+                        if (!$err) {
+                            $api_data = json_decode($response, true);
+                        } else {
+                            Log::error("Error de cURL al consultar API DNI: " . $err);
+                        }
+                    }
 
-                            $numero_documento = $data_from_api['numero'] ?? $data_from_api['ruc'] ?? $query;
-                            $nombre_razon_social = $data_from_api['nombres'] ?? $data_from_api['nombre_o_razon_social'] ?? 'N/A';
+                    if (!empty($api_data) && isset($api_data['success']) && $api_data['success'] == true) {  
+                        $data_from_api = $api_data['data']; 
+
+                        // Extraer valores adaptados según procedencia (RUC propio vs DNI apiperu)
+                        if ($tipo_documento_api === 'ruc') {
+                            $numero_documento = $data_from_api['ruc'] ?? $query;
+                            $nombre_razon_social = $data_from_api['razon_social'] ?? 'N/A';
+                            $direccion = $data_from_api['direccion'] ?? 'No disponible';
+                        } else {
+                            $numero_documento = $data_from_api['numero'] ?? $query;
+                            $nombre_razon_social = $data_from_api['nombres'] ?? '';
                             if (isset($data_from_api['apellido_paterno'])) $nombre_razon_social .= ' ' . $data_from_api['apellido_paterno'];
                             if (isset($data_from_api['apellido_materno'])) $nombre_razon_social .= ' ' . $data_from_api['apellido_materno'];
-                            $direccion = $data_from_api['direccion_completa'] ?? $data_from_api['direccion'] ?? 'No disponible';
-                            $tipo_doc = (strlen($numero_documento) == 11) ? '6' : '1'; 
+                            $direccion = $data_from_api['direccion_completa'] ?? $data_from_api['direccion'] ?? '--';
+                        }
 
-                            $already_in_results = false;
-                            foreach ($results as $res) {
-                                if ($res['num'] === $numero_documento) {
-                                    $already_in_results = true;
-                                    break;
-                                }
-                            }
+                        $tipo_doc = (strlen($numero_documento) == 11) ? '6' : '1'; 
 
-                            if (!$already_in_results) {
-                                $results[] = [
-                                    'label' => "(API) {$nombre_razon_social} ({$numero_documento})",
-                                    'value' => ($field === 'clinum') ? $numero_documento : $nombre_razon_social,
-                                    'nom' => $nombre_razon_social,
-                                    'num' => $numero_documento,
-                                    'dir' => $direccion,
-                                    'tdicod' => $tipo_doc,
-                                    'clicod' => null,
-                                    'tel' => null
-                                ];
+                        $already_in_results = false;
+                        foreach ($results as $res) {
+                            if ($res['num'] === $numero_documento) {
+                                $already_in_results = true;
+                                break;
                             }
+                        }
+
+                        if (!$already_in_results) {
+                            $results[] = [
+                                'label' => "(API) {$nombre_razon_social} ({$numero_documento})",
+                                'value' => ($field === 'clinum') ? $numero_documento : $nombre_razon_social,
+                                'nom' => $nombre_razon_social,
+                                'num' => $numero_documento,
+                                'dir' => $direccion,
+                                'tdicod' => $tipo_doc,
+                                'clicod' => null,
+                                'tel' => null
+                            ];
                         }
                     }
                 } catch (\Exception $e) {
@@ -1541,8 +1576,8 @@ public function autocompleteClient(Request $request)
                             $results[] = [
                                 'num' => $leer_respuesta['data']['ruc'],
                                 'value' => $leer_respuesta['data']['ruc'],
-                                'nom' => $leer_respuesta['data']['nombre_o_razon_social'],
-                                'dir' => $leer_respuesta['data']['direccion_completa'],
+                                'nom' => $leer_respuesta['data']['razon_social'],
+                                'dir' => $leer_respuesta['data']['direccion'],
                                 'tdicod' => '6',
                                 'clicod' => null,
                             ];
@@ -1559,21 +1594,16 @@ public function autocompleteClient(Request $request)
         }
     }
 
-    
     private function consultaruc($ruc)
     {
-        $params = json_encode(['ruc' => $ruc]);
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://apiperu.dev/api/ruc",
+            CURLOPT_URL => "https://consultas.holape.app/api/v1/ruc/" . $ruc,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_POSTFIELDS => $params,
             CURLOPT_HTTPHEADER => [
                 'Accept: application/json',
-                'Content-Type: application/json',
-                'Authorization: Bearer c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09'
             ],
         ));
         $response = curl_exec($curl);
@@ -1581,7 +1611,7 @@ public function autocompleteClient(Request $request)
         curl_close($curl);
 
         if ($err) {
-            throw new \Exception("Error cURL al consultar RUC: " . $err);
+            throw new \Exception("Error cURL al consultar RUC propio: " . $err);
         } else {
             return json_decode($response, true);
         }

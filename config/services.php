@@ -29,6 +29,14 @@ return [
         'secret' => env('SPARKPOST_SECRET'),
     ],
 
+    'qwen' => [
+        'api_key' => env('QWEN_API_KEY'),
+    ],
+
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+    ],
+
     'stripe' => [
         'model' => MasterSoft\User::class,
         'key' => env('STRIPE_KEY'),

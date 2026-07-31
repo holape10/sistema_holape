@@ -1532,3 +1532,5 @@ Route::prefix('ocr')->group(function () {
     Route::get('/', 'OcrController@index')->name('ocr.index');
     Route::post('/process', 'OcrController@process')->name('ocr.process');
 });
+
+Route::get('/api/v1/ruc/{ruc}', 'SunatController@consultar');

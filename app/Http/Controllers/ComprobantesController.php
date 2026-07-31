@@ -1000,71 +1000,53 @@ class ComprobantesController extends Controller
       return response()->json($results);
     }
 
- public function autocompleteprov(Request $request,$search){     
-
-    try{
-
-      $rucemp = trim(Auth::user()->IdEmpresa);
-      $ruc = Proveedor::where('prov_ruc','=',$search)->take(10)->get();
-      $results = array();
- 
-      if(count($ruc)==0){
- 
-         if(strlen($search)<='8'){ 
-               $leer_respuesta = self::consultardni($search);
-                $results[] = ['value'=>$leer_respuesta['data']['numero'],'nom'=>$leer_respuesta['data']['nombres'].' '.$leer_respuesta['data']['apellido_paterno'].' '.$leer_respuesta['data']['apellido_materno'],'dir'=>'--','tdicod'=>'1']; 
-         }else{         
-              $leer_respuesta = self::consultaruc($search); 
-              $results[] = ['value'=>$leer_respuesta['data']['ruc'],'nom'=>$leer_respuesta['data']['nombre_o_razon_social'],'dir'=>$leer_respuesta['data']['direccion_completa'],'tdicod'=>'6','ubigeo'=>'']; 
-         }        
-       }else{ 
-         foreach($ruc as $cli => $search){
-            $numnom=$search->clinum;          
-           $results[] = ['value'=>$numnom,'nom'=>$search->clinom,'dir'=>$search->clidir,'tdicod'=>$search->tdicod,'clicod'=>$search->clicod,'cor'=>$search->clicor,'tel'=>$search->telefono,'fecha_nacimiento'=>$search->fecha_nacimiento,'cuenta12'=>$search->cuenta12,'sex_id'=>$search->sex_id,'est_civ_id'=>$search->est_civ_id,'ubigeo'=>''];
-         }        
-       }
-
-        return response()->json($results);
-
-    }catch(\Exception $e){
-       return response()->json(['error' => 'NO SE ENCONTRÓ EL RUC']);       
-    }     
-    
-
-    }
-
-       public function autocomplete($cliente){
+ public function autocompleteprov(Request $request, $search){     
     try {
-        // Buscamos al cliente seleccionando explícitamente los campos necesarios
-        $ruc = Cliente::where('clinum', '=', $cliente)
-              ->select('clicod', 'clinum', 'clinom', 'clidir', 'clicor', 'telefono', 'fecha_nacimiento', 'cuenta12', 'sex_id', 'est_civ_id', 'tdicod')
-              ->take(10)
-              ->get();
-
+        $rucemp = trim(Auth::user()->IdEmpresa);
+        $ruc = Proveedor::where('prov_ruc', '=', $search)->take(10)->get();
         $results = array();
 
-        if(count($ruc) == 0){ 
-            if(strlen($cliente) <= 8){ 
-                $leer_respuesta = self::consultardni($cliente);
-                $results[] = ['value'=>$leer_respuesta['data']['numero'],'nom'=>$leer_respuesta['data']['nombres'].' '.$leer_respuesta['data']['apellido_paterno'].' '.$leer_respuesta['data']['apellido_materno'],'dir'=>'--','tdicod'=>'1']; 
+        if(count($ruc) == 0){
+            if(strlen($search) <= 8){ 
+                // CONSULTA DNI
+                $leer_respuesta = self::consultardni($search);
+
+                if (isset($leer_respuesta['success']) && $leer_respuesta['success']) {
+                    $results[] = [
+                        'value'  => $leer_respuesta['data']['numero'] ?? $search,
+                        'nom'    => ($leer_respuesta['data']['nombres'] ?? '') . ' ' . ($leer_respuesta['data']['apellido_paterno'] ?? '') . ' ' . ($leer_respuesta['data']['apellido_materno'] ?? ''),
+                        'dir'    => '--',
+                        'tdicod' => '1'
+                    ]; 
+                }
             } else {          
-                $leer_respuesta = self::consultaruc($cliente); 
-                $results[] = ['value'=>$leer_respuesta['data']['ruc'],'nom'=>$leer_respuesta['data']['nombre_o_razon_social'],'dir'=>$leer_respuesta['data']['direccion_completa'],'tdicod'=>'6','ubigeo'=>'']; 
+                // CONSULTA RUC (Tu API Propia)
+                $leer_respuesta = self::consultaruc($search); 
+
+                if (isset($leer_respuesta['success']) && $leer_respuesta['success']) {
+                    $results[] = [
+                        'value'  => $leer_respuesta['data']['ruc'],
+                        'nom'    => $leer_respuesta['data']['razon_social'],
+                        'dir'    => $leer_respuesta['data']['direccion'],
+                        'tdicod' => '6',
+                        'ubigeo' => $leer_respuesta['data']['ubigeo'] ?? ''
+                    ]; 
+                }
             }        
         } else { 
-            // CAMBIO AQUÍ: Usamos '$item' en el bucle para no confundir con el parámetro '$cliente'
+            // Búsqueda interna en base de datos de Proveedores
+            // CAMBIO: Cambiamos '$search' en el bucle por '$item' para NO sobreescribir la variable del parámetro
             foreach($ruc as $item){
+                $numnom = $item->clinum;          
                 $results[] = [
-                    'value'            => $item->clinum,
+                    'value'            => $numnom,
                     'nom'              => $item->clinom,
                     'dir'              => $item->clidir,
                     'tdicod'           => $item->tdicod,
                     'clicod'           => $item->clicod,
                     'cor'              => $item->clicor,
                     'tel'              => $item->telefono,
-                    // Aseguramos que el nombre de la clave sea 'fecnac' o 'fecha_nacimiento' según lo que tu JS espera                    
-                    'fecnac'           => $item->fecha_nacimiento, // Enviamos ambos por seguridad
-                    'fecha_nacimiento' => $item->fecha_nacimiento, 
+                    'fecha_nacimiento' => $item->fecha_nacimiento,
                     'cuenta12'         => $item->cuenta12,
                     'sex_id'           => $item->sex_id,
                     'est_civ_id'       => $item->est_civ_id,
@@ -1076,9 +1058,75 @@ class ComprobantesController extends Controller
         return response()->json($results);
 
     } catch(\Exception $e){
-        return response()->json(['error' => 'Error en la búsqueda']);
-    }
+        return response()->json(['error' => 'NO SE ENCONTRÓ EL RUC']);        
+    }     
 }
+
+      public function autocomplete($cliente){
+        try {
+            // Buscamos al cliente seleccionando explícitamente los campos necesarios
+            $ruc = Cliente::where('clinum', '=', $cliente)
+                  ->select('clicod', 'clinum', 'clinom', 'clidir', 'clicor', 'telefono', 'fecha_nacimiento', 'cuenta12', 'sex_id', 'est_civ_id', 'tdicod')
+                  ->take(10)
+                  ->get();
+
+            $results = array();
+
+            if(count($ruc) == 0){ 
+                if(strlen($cliente) <= 8){ 
+                    // CONSULTA DNI
+                    $leer_respuesta = self::consultardni($cliente);
+                    
+                    if (isset($leer_respuesta['success']) && $leer_respuesta['success']) {
+                        $results[] = [
+                            'value'  => $leer_respuesta['data']['numero'] ?? $cliente,
+                            'nom'    => ($leer_respuesta['data']['nombres'] ?? '') . ' ' . ($leer_respuesta['data']['apellido_paterno'] ?? '') . ' ' . ($leer_respuesta['data']['apellido_materno'] ?? ''),
+                            'dir'    => '--',
+                            'tdicod' => '1'
+                        ]; 
+                    }
+                } else {          
+                    // CONSULTA RUC (Tu API Propia)
+                    $leer_respuesta = self::consultaruc($cliente); 
+
+                    // Validamos que la API haya respondido success = true
+                    if (isset($leer_respuesta['success']) && $leer_respuesta['success']) {
+                        $results[] = [
+                            'value'  => $leer_respuesta['data']['ruc'],
+                            'nom'    => $leer_respuesta['data']['razon_social'],
+                            'dir'    => $leer_respuesta['data']['direccion'],
+                            'tdicod' => '6',
+                            'ubigeo' => $leer_respuesta['data']['ubigeo'] ?? ''
+                        ]; 
+                    }
+                }        
+            } else { 
+                // Búsqueda interna en base de datos de Clientes
+                foreach($ruc as $item){
+                    $results[] = [
+                        'value'            => $item->clinum,
+                        'nom'              => $item->clinom,
+                        'dir'              => $item->clidir,
+                        'tdicod'           => $item->tdicod,
+                        'clicod'           => $item->clicod,
+                        'cor'              => $item->clicor,
+                        'tel'              => $item->telefono,
+                        'fecnac'           => $item->fecha_nacimiento,
+                        'fecha_nacimiento' => $item->fecha_nacimiento, 
+                        'cuenta12'         => $item->cuenta12,
+                        'sex_id'           => $item->sex_id,
+                        'est_civ_id'       => $item->est_civ_id,
+                        'ubigeo'           => ''
+                    ];
+                }        
+            }
+
+            return response()->json($results);
+
+        } catch(\Exception $e){
+            return response()->json(['error' => 'Error en la búsqueda']);
+        }
+    }
 
 
 
@@ -1309,39 +1357,33 @@ class ComprobantesController extends Controller
 
 
 
-     public function consultaruc($ruc){
-        
-    
-       
-          $params = json_encode(['ruc' => $ruc]);
-          $curl = curl_init();
-          curl_setopt_array($curl, array(
-              CURLOPT_URL => "https://apiperu.dev/api/ruc",
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_CUSTOMREQUEST => "POST",
-              CURLOPT_SSL_VERIFYPEER => false,
-              CURLOPT_POSTFIELDS => $params,        
-              CURLOPT_HTTPHEADER => [
-                  'Accept: application/json',
-                  'Content-Type: application/json',
-                  'Authorization: Bearer c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09'
-              ],        
-          ));
-          $response = curl_exec($curl);
-          $err = curl_error($curl);
-          curl_close($curl);
+     public function consultaruc($ruc)
+    {
+        $curl = curl_init();
 
-          if ($err) {
-            return $err;
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://consultas.holape.app/api/v1/ruc/" . $ruc,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_HTTPHEADER => [
+                'Accept: application/json',
+            ],
+        ));
 
-          } else {
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
 
+        if ($err) {
+            return [
+                'success' => false, 
+                'message' => 'Error cURL: ' . $err
+            ];
+        } else {
             $leer_respuesta = json_decode($response, true);
-
-            return  $leer_respuesta;
-          }
-             
-                  
+            return $leer_respuesta;
+        }
     }
 
     public function consultardni($dni){

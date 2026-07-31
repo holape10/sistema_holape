@@ -408,48 +408,43 @@ class EmpresaController extends Controller
     }
 
     public function consultaRucSunat($ruc)
-    {
-        // HERMANO: Recuerda reemplazar 'TU_TOKEN_AQUI' por tu token real de apiperu.dev
-        $token = 'c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09'; 
+{
+    // Apuntamos directamente a tu microservicio propio
+    $url = "https://consultas.holape.app/api/v1/ruc/" . $ruc;
+
+    $curl = curl_init();
+    curl_setopt_array($curl, [
+        CURLOPT_URL => $url,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CUSTOMREQUEST => "GET", // Cambiamos a GET porque ya no mandamos body POST
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_HTTPHEADER => [
+            'Accept: application/json',
+            // Ya no necesitamos el Token de apiperu.dev aquí
+        ],
+    ]);
+
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+    curl_close($curl);
+
+    if ($err) {
+        return response()->json(['error' => 'Error de conexión con tu servidor de RUC']);
+    } else {
+        $data = json_decode($response);
         
-        $params = json_encode(['ruc' => $ruc]);
-
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_URL => "https://apiperu.dev/api/ruc",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_POSTFIELDS => $params,
-            CURLOPT_HTTPHEADER => [
-                'Accept: application/json',
-                'Content-Type: application/json',
-                'Authorization: Bearer ' . $token
-            ],
-        ]);
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) {
-            return response()->json(['error' => 'Error de conexión con la API de SUNAT']);
+        // Validamos que la API nos haya devuelto success = true
+        if(isset($data->success) && $data->success == true){
+            return response()->json([
+                'nom'    => $data->data->razon_social, // Mapeado de tu API propia
+                'dir'    => $data->data->direccion,    // Dirección completa concatenada
+                'ubigeo' => $data->data->ubigeo       // Código de ubigeo (ej. "160101")
+            ]);
         } else {
-            $data = json_decode($response);
-            
-            // Validamos que la API nos haya devuelto success = true
-            if(isset($data->success) && $data->success == true){
-                return response()->json([
-                    // Cambiamos a formato de objeto directo para que sea más fácil en JS
-                    'nom' => $data->data->nombre_o_razon_social,
-                    'dir' => $data->data->direccion_completa, // o direccion sola, como prefieras
-                    'ubigeo' => $data->data->ubigeo_sunat // Este es el código clave: ej. "150101"
-                ]);
-            } else {
-                return response()->json(['error' => 'RUC no encontrado o no válido']);
-            }
+            return response()->json(['error' => 'RUC no encontrado o no válido']);
         }
     }
+}
 
     
 

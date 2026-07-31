@@ -24,28 +24,25 @@ class OcrController extends Controller
             $mimeType = $file->getClientMimeType();
             $base64Data = base64_encode(file_get_contents($file->getRealPath()));
 
-            $apiKey = env('GEMINI_API_KEY');
+            $apiKey = config('services.gemini.api_key');
             if (!$apiKey) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'GEMINI_API_KEY no configurada en el .env'
+                    'message' => 'GEMINI_API_KEY no configurada en .env'
                 ], 500);
             }
 
-            $prompt = "Extrae los datos principales de este comprobante o factura en formato JSON estricto. "
-                . "No incluyas formateo markdown ni triple comillas. "
-                . "Campos requeridos: ruc_emisor, razon_social, tipo_documento, serie_numero, fecha_emision, "
-                . "monto_op_gravada, monto_igv, monto_total, items (un array de objetos con: descripcion, cantidad, precio_unitario, importe).";
+            $prompt = "Eres un experto en extracción de datos de facturas. Extrae SOLO estos campos en JSON estricto: ruc_emisor, razon_social, tipo_documento, serie_numero, fecha_emision, monto_op_gravada, monto_igv, monto_total, items (array con: descripcion, cantidad, precio_unitario, importe). Si no encuentras un campo, déjalo vacío.";
 
             $client = new Client();
             
-            // ENDPOINT ESTABLE (v1)
-            // Cambia gemini-2.0-flash por gemini-1.5-flash-8b
-            $endpoint = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-8b:generateContent?key={$apiKey}";
+            // ✅ Gemini 2.0 Flash - Gratis y rápido
+            $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
             $response = $client->post($endpoint, [
                 'headers' => [
                     'Content-Type' => 'application/json',
+                    'x-goog-api-key' => $apiKey,
                 ],
                 'json' => [
                     'contents' => [
@@ -55,7 +52,7 @@ class OcrController extends Controller
                                 [
                                     'inline_data' => [
                                         'mime_type' => $mimeType,
-                                        'data'      => $base64Data
+                                        'data' => $base64Data
                                     ]
                                 ]
                             ]
@@ -65,28 +62,31 @@ class OcrController extends Controller
                         'response_mime_type' => 'application/json'
                     ]
                 ],
-                'timeout' => 30
+                'timeout' => 45
             ]);
 
             $body = json_decode($response->getBody()->getContents(), true);
             $rawText = $body['candidates'][0]['content']['parts'][0]['text'] ?? '{}';
-            
             $extractedData = json_decode($rawText, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('JSON inválido: ' . json_last_error_msg());
+            }
 
             return response()->json([
                 'success' => true,
-                'data'    => $extractedData
+                'data' => $extractedData
             ]);
 
         } catch (GuzzleException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error al comunicarse con la API de IA: ' . $e->getMessage()
+                'message' => 'Error API Gemini: ' . $e->getMessage()
             ], 500);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error de procesamiento: ' . $e->getMessage()
+                'message' => 'Error: ' . $e->getMessage()
             ], 500);
         }
     }

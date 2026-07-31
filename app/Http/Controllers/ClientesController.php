@@ -94,20 +94,12 @@ class ClientesController extends Controller
         $datosCliente = [
             'clinom'     => $request->get('clinom'),
             'clidir'     => $request->get('clidir'),
-            'clicor'     => $request->get('clicor'),
-            'clicor2'    => $request->get('clicor2'),
-            'clicor3'    => $request->get('clicor3'),
-            'clicor4'    => $request->get('clicor4'),
+            'clicor'     => $request->get('clicor'),            
             'tdicod'     => $tdicod,
             'telefono'   => $request->get('clitel'),      // CELULAR
             'fecha_nacimiento'  => $fecha_nacimiento,                   // FECHA NACIMIENTO
-            'mes_nac'    => $mes,                         // MES PARA CUMPLEAÑOS
-            'direccion1' => $request->get('clidir1'),
-            'direccion2' => $request->get('clidir2'),
-            'cuenta12' => $request->get('cuenta12'),
-            'direccion3' => $request->get('clidir3'),
-            'direccion4' => $request->get('clidir4'),
-            'direccion5' => $request->get('clidir5')
+            'mes_nac'    => $mes,                         // MES PARA CUMPLEAÑOS            
+            'cuenta12' => $request->get('cuenta12'),            
         ];
 
         if (empty(trim($request->get('clinum')))) {
@@ -178,15 +170,7 @@ class ClientesController extends Controller
         $cliente->clidir = $request->get('clidir');
         $cliente->clinom = $request->get('clinom');
         $cliente->clicor = $request->get('clicor');
-        $cliente->clicor2 = $request->get('clicor2');
-        $cliente->clicor3 = $request->get('clicor3');
-        $cliente->clicor4 = $request->get('clicor4');
         $cliente->cuenta12 = $request->get('cuenta12');
-        $cliente->direccion1 = $request->get('clidir1');
-        $cliente->direccion2 = $request->get('clidir2');
-        $cliente->direccion3 = $request->get('clidir3');
-        $cliente->direccion4 = $request->get('clidir4');
-        $cliente->direccion5 = $request->get('clidir5');
         
         // Guardando celular y fecha
         $cliente->telefono  = $request->get('clitel');

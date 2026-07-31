@@ -162,10 +162,10 @@
                 <select class="form-control selectpicker2 input-sm" data-show-subtext="true" data-live-search="true" name="clicod" id="clicod" onchange="seleccionarcliente();">
                   <option></option>
                   @foreach($clientes as $cliente)
-                  	 @if($cliente->tdicod == $clientenuevo->tdicod)
-                    <option selected="selected" value="{{$cliente->clicod}}" data-documento="{{$cliente->tdicod}}" data-clinum="{{$cliente->clinum}}" data-direccion="{{$cliente->clidir}}" data-clinom="{{$cliente->clinom}}" data-correo="{{$cliente->clicor}}" data-correo2="{{$cliente->clicor2}}" data-correo3="{{$cliente->clicor3}}" data-correo4="{{$cliente->clicor4}}" data-telefono="{{$cliente->telefono}}">{{$cliente->clinum}} - {{$cliente->clinom}}</option>
+                     @if($cliente->tdicod == $clientenuevo->tdicod)
+                    <option selected="selected" value="{{$cliente->clicod}}" data-documento="{{$cliente->tdicod}}" data-clinum="{{$cliente->clinum}}" data-direccion="{{$cliente->clidir}}" data-clinom="{{$cliente->clinom}}" data-correo="{{$cliente->clicor}}"  data-telefono="{{$cliente->telefono}}">{{$cliente->clinum}} - {{$cliente->clinom}}</option>
                    @else
-                   <option value="{{$cliente->clicod}}" data-documento="{{$cliente->tdicod}}" data-clinum="{{$cliente->clinum}}" data-direccion="{{$cliente->clidir}}" data-clinom="{{$cliente->clinom}}" data-correo="{{$cliente->clicor}}" data-correo2="{{$cliente->clicor2}}" data-correo3="{{$cliente->clicor3}}" data-correo4="{{$cliente->clicor4}}"data-telefono="{{$cliente->telefono}}">{{$cliente->clinum}} - {{$cliente->clinom}}</option>
+                   <option value="{{$cliente->clicod}}" data-documento="{{$cliente->tdicod}}" data-clinum="{{$cliente->clinum}}" data-direccion="{{$cliente->clidir}}" data-clinom="{{$cliente->clinom}}" data-correo="{{$cliente->clicor}}" data-telefono="{{$cliente->telefono}}">{{$cliente->clinum}} - {{$cliente->clinom}}</option>
                    @endif
                   @endforeach
                 </select>
@@ -195,24 +195,7 @@
                   <input name="clicor" id="clicor" value="{{$clientenuevo->clicor}}" class="form-control">
                 </div>
               </div>
-              <div hidden="hidden" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                <div class="form-group form-group-sm">
-                  <label>Correo Electr&oacute;nico 2</label>
-                  <input name="clicor2" id="clicor2" value="{{$clientenuevo->clicor2}}" class="form-control">
-                </div>
-              </div>
-              <div hidden="hidden" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                <div class="form-group form-group-sm">
-                  <label>Correo Electr&oacute;nico 3</label>
-                  <input name="clicor3" id="clicor3" value="{{$clientenuevo->clicor3}}" class="form-control">
-                </div>
-              </div>
-              <div hidden="hidden" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                <div class="form-group form-group-sm">
-                  <label>Correo Electr&oacute;nico 4</label>
-                  <input name="clicor4" id="clicor4" value="{{$clientenuevo->clicor4}}" class="form-control">
-                </div>
-              </div>
+              
              <!-- <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                 <div class="form-group form-group-sm">
                   <label>Tel&eacute;fono</label>
@@ -226,4 +209,4 @@
                  
            </div>
         </div>
-    	
+      

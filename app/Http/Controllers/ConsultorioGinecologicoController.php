@@ -147,7 +147,7 @@ class ConsultorioGinecologicoController extends Controller
                                         }
                                     })
                                     ->limit(10)
-                                    ->get(['clicod', 'clinum', 'clinom', 'clidir', 'tdicod', 'clicontel']); // Cambié telefono a clicontel según tu modelo
+                                    ->get(['clicod', 'clinum', 'clinom', 'clidir', 'tdicod', 'clicontel']);
 
         $results = [];
 
@@ -166,9 +166,8 @@ class ConsultorioGinecologicoController extends Controller
         }
 
         // Si la búsqueda es por número y no se encontraron suficientes resultados localmente, intentar con la API
-        if ($field === 'clinum' && count($results) < 10) { 
-            $api_token = 'c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09'; 
-                                                                                                            
+        if ($field === 'clinum' && count($results) < 10) {  
+            $api_token = 'c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09';                                                                                                         
             $tipo_documento_api = '';
             $numero_documento_api = '';
 
@@ -182,37 +181,71 @@ class ConsultorioGinecologicoController extends Controller
             
             if (!empty($tipo_documento_api)) {
                 try {
-                    $params = json_encode([$tipo_documento_api => $numero_documento_api]);
-                    $curl = curl_init();
-                    curl_setopt_array($curl, array(
-                        CURLOPT_URL => "https://apiperu.dev/api/{$tipo_documento_api}",
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_CUSTOMREQUEST => "POST",
-                        CURLOPT_SSL_VERIFYPEER => false, 
-                        CURLOPT_POSTFIELDS => $params,     
-                        CURLOPT_HTTPHEADER => [
-                            'Accept: application/json',
-                            'Content-Type: application/json',
-                            'Authorization: Bearer ' . $api_token
-                        ],     
-                    ));
-                    $response = curl_exec($curl);
-                    $err = curl_error($curl);
-                    curl_close($curl);
+                    $api_data = [];
+                    $err = null;
+
+                    // Si es RUC consultamos a tu servidor propio (GET)
+                    if ($tipo_documento_api === 'ruc') {
+                        $curl = curl_init();
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => "https://consultas.holape.app/api/v1/ruc/" . $numero_documento_api,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_CUSTOMREQUEST => "GET",
+                            CURLOPT_SSL_VERIFYPEER => false,
+                            CURLOPT_HTTPHEADER => [
+                                'Accept: application/json',
+                            ],
+                        ));
+                        $response = curl_exec($curl);
+                        $err = curl_error($curl);
+                        curl_close($curl);
+
+                        if (!$err) {
+                            $api_data = json_decode($response, true);
+                        }
+                    } else {
+                        // Si es DNI consultamos a apiperu.dev (POST)
+                        $params = json_encode(['dni' => $numero_documento_api]);
+                        $curl = curl_init();
+                        curl_setopt_array($curl, array(
+                            CURLOPT_URL => "https://apiperu.dev/api/dni",
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_CUSTOMREQUEST => "POST",
+                            CURLOPT_SSL_VERIFYPEER => false, 
+                            CURLOPT_POSTFIELDS => $params,     
+                            CURLOPT_HTTPHEADER => [
+                                'Accept: application/json',
+                                'Content-Type: application/json',
+                                'Authorization: Bearer ' . $api_token
+                            ],     
+                        ));
+                        $response = curl_exec($curl);
+                        $err = curl_error($curl);
+                        curl_close($curl);
+
+                        if (!$err) {
+                            $api_data = json_decode($response, true);
+                        }
+                    }
 
                     if ($err) {
                         Log::error("Error de cURL al consultar API: " . $err);
                     } else {
-                        $api_data = json_decode($response, true);
-
-                        if (!empty($api_data) && isset($api_data['data'])) { 
+                        if (!empty($api_data) && isset($api_data['success']) && $api_data['success'] == true) {  
                             $data_from_api = $api_data['data']; 
 
-                            $numero_documento = $data_from_api['numero'] ?? $data_from_api['ruc'] ?? $query;
-                            $nombre_razon_social = $data_from_api['nombres'] ?? $data_from_api['nombre_o_razon_social'] ?? 'N/A';
-                            if (isset($data_from_api['apellido_paterno'])) $nombre_razon_social .= ' ' . $data_from_api['apellido_paterno'];
-                            if (isset($data_from_api['apellido_materno'])) $nombre_razon_social .= ' ' . $data_from_api['apellido_materno'];
-                            $direccion = $data_from_api['direccion_completa'] ?? $data_from_api['direccion'] ?? '--';
+                            if ($tipo_documento_api === 'ruc') {
+                                $numero_documento = $data_from_api['ruc'] ?? $query;
+                                $nombre_razon_social = $data_from_api['razon_social'] ?? 'N/A';
+                                $direccion = $data_from_api['direccion'] ?? 'No disponible';
+                            } else {
+                                $numero_documento = $data_from_api['numero'] ?? $query;
+                                $nombre_razon_social = $data_from_api['nombres'] ?? '';
+                                if (isset($data_from_api['apellido_paterno'])) $nombre_razon_social .= ' ' . $data_from_api['apellido_paterno'];
+                                if (isset($data_from_api['apellido_materno'])) $nombre_razon_social .= ' ' . $data_from_api['apellido_materno'];
+                                $direccion = $data_from_api['direccion_completa'] ?? $data_from_api['direccion'] ?? '--';
+                            }
+
                             $tipo_doc = (strlen($numero_documento) == 11) ? '6' : '1'; 
 
                             $already_in_results = false;

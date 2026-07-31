@@ -43,6 +43,8 @@ Route::get('/impresion/pendiente', function(Request $request) {
     return response()->json($pedido);
 });
 
+Route::get('/v1/ruc/{ruc}', 'SunatController@consultar');
+
 // Ruta para marcar impreso
 Route::get('/impresion/marcar-impreso/{id}', function(Request $request, $id) {
     if ($request->query('token') !== 'HOLAPE10') {

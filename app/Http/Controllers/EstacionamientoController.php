@@ -54,40 +54,71 @@ class EstacionamientoController extends Controller
     }
 
     // API PERU: Consultar DNI o RUC
-    public function consultarDocumento(Request $request) {
+   public function consultarDocumento(Request $request) {
         $documento = trim($request->get('documento'));
-        $token = 'c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09'; 
 
         if (strlen($documento) === 8) {
+            // ==========================================
+            // 1. CONSULTA DNI (Usando apiperu.dev)
+            // ==========================================
+            $token = 'c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09'; 
             $params = json_encode(['dni' => $documento]);
             $url = "https://apiperu.dev/api/dni";
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_POSTFIELDS => $params,
+                CURLOPT_HTTPHEADER => [
+                    'Accept: application/json',
+                    'Content-Type: application/json',
+                    'Authorization: Bearer ' . $token
+                ],
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err) { 
+                return response()->json(['error' => 'Error de conexión DNI: ' . $err]); 
+            }
+            
+            return response()->json(json_decode($response, true));
+
         } elseif (strlen($documento) === 11) {
-            $params = json_encode(['ruc' => $documento]);
-            $url = "https://apiperu.dev/api/ruc";
+            // ==========================================
+            // 2. CONSULTA RUC (Usando consultas.holape.app)
+            // ==========================================
+            $url = "https://consultas.holape.app/api/v1/ruc/" . $documento;
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_HTTPHEADER => [
+                    'Accept: application/json',
+                ],
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+
+            if ($err) { 
+                return response()->json(['error' => 'Error de conexión RUC propio: ' . $err]); 
+            }
+            
+            return response()->json(json_decode($response, true));
+
         } else {
             return response()->json(['error' => 'El documento debe tener 8 dígitos (DNI) o 11 dígitos (RUC).']);
         }
-
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_POSTFIELDS => $params,
-            CURLOPT_HTTPHEADER => [
-                'Accept: application/json',
-                'Content-Type: application/json',
-                'Authorization: Bearer ' . $token
-            ],
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
-
-        if ($err) { return response()->json(['error' => 'Error de conexión: ' . $err]); }
-        return response()->json(json_decode($response, true));
     }
 
     // Registrar Ingreso

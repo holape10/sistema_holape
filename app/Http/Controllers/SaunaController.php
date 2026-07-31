@@ -290,24 +290,24 @@ class SaunaController extends Controller
     // --- TUS MÉTODOS PRIVADOS DE CONSULTA API ---
     private function consultaruc($ruc)
     {
-        $params = json_encode(['ruc' => $ruc]);
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://apiperu.dev/api/ruc",
+            CURLOPT_URL => "https://consultas.holape.app/api/v1/ruc/" . $ruc,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_POSTFIELDS => $params,
             CURLOPT_HTTPHEADER => [
                 'Accept: application/json',
-                'Content-Type: application/json',
-                'Authorization: Bearer c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09'
             ],
         ));
         $response = curl_exec($curl);
         $err = curl_error($curl);
         curl_close($curl);
-        if ($err) { throw new \Exception("Error cURL RUC: " . $err); } 
+        
+        if ($err) { 
+            throw new \Exception("Error cURL RUC propio: " . $err); 
+        } 
+        
         return json_decode($response, true);
     }
 

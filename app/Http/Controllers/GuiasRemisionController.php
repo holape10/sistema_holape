@@ -659,19 +659,15 @@ class GuiasRemisionController extends Controller
     }
 
     public function consultarDocumento(Request $request) {
-        $documento = trim($request->get('documento'));
-        // Tu token de apiperu.dev
-        $token = 'c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09'; 
+    $documento = trim($request->get('documento'));
 
-        if (strlen($documento) === 8) {
-            $params = json_encode(['dni' => $documento]);
-            $url = "https://apiperu.dev/api/dni";
-        } elseif (strlen($documento) === 11) {
-            $params = json_encode(['ruc' => $documento]);
-            $url = "https://apiperu.dev/api/ruc";
-        } else {
-            return response()->json(['error' => 'El documento debe tener 8 (DNI) u 11 dígitos (RUC).']);
-        }
+    if (strlen($documento) === 8) {
+        // ==========================================
+        // 1. CONSULTA DNI (Usando apiperu.dev)
+        // ==========================================
+        $token = 'c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09'; 
+        $params = json_encode(['dni' => $documento]);
+        $url = "https://apiperu.dev/api/dni";
 
         $curl = curl_init();
         curl_setopt_array($curl, [
@@ -692,39 +688,67 @@ class GuiasRemisionController extends Controller
         curl_close($curl);
 
         if ($err) { 
-            return response()->json(['error' => 'Error de conexión: ' . $err]); 
+            return response()->json(['error' => 'Error de conexión DNI: ' . $err]); 
         }
 
         $data = json_decode($response, true);
 
         if(isset($data['success']) && $data['success'] == true) {
-            // Si es DNI
-            if (strlen($documento) === 8) {
-                return response()->json([
-                    'nom' => $data['data']['nombre_completo']
-                ]);
-            } 
-            // Si es RUC
-            else {
-                // Validación extra por si la API trae el ubigeo vacío
-                $ubigeo_sunat = $data['data']['ubigeo_sunat'] ?? '000000';
-                $ubigeo_cod = is_array($ubigeo_sunat) ? $ubigeo_sunat[0] : $ubigeo_sunat;
-                
-                // Usamos \DB:: para no tener problemas de importación
-                $ubigeo_bd = \DB::table('cat_ubigeo')->where('ubi_cod', $ubigeo_cod)->first();
-                $ubigeo_des = $ubigeo_bd ? trim($ubigeo_bd->ubi_des) : 'Autocompletado';
-
-                return response()->json([
-                    'nom' => $data['data']['nombre_o_razon_social'],
-                    'dir' => $data['data']['direccion_completa'],
-                    'ubigeo' => $ubigeo_cod,
-                    'ubigeo_des' => $ubigeo_des
-                ]);
-            }
+            return response()->json([
+                'nom' => $data['data']['nombre_completo']
+            ]);
         } else {
-            return response()->json(['error' => 'Documento no encontrado en SUNAT/RENIEC.']);
+            return response()->json(['error' => 'DNI no encontrado en RENIEC.']);
         }
+
+    } elseif (strlen($documento) === 11) {
+        // ==========================================
+        // 2. CONSULTA RUC (Usando tu servidor consultas.holape.app)
+        // ==========================================
+        $url = "https://consultas.holape.app/api/v1/ruc/" . $documento;
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET", // Petición GET limpia
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_HTTPHEADER => [
+                'Accept: application/json',
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if ($err) { 
+            return response()->json(['error' => 'Error de conexión con tu servidor RUC: ' . $err]); 
+        }
+
+        $data = json_decode($response, true);
+
+        if(isset($data['success']) && $data['success'] == true) {
+            $ubigeo_cod = $data['data']['ubigeo'] ?? '000000';
+            
+            // Buscamos la descripción en tu tabla cat_ubigeo local para mantener compatibilidad
+            $ubigeo_bd = \DB::table('cat_ubigeo')->where('ubi_cod', $ubigeo_cod)->first();
+            $ubigeo_des = $ubigeo_bd ? trim($ubigeo_bd->ubi_des) : 'Autocompletado';
+
+            return response()->json([
+                'nom'        => $data['data']['razon_social'],
+                'dir'        => $data['data']['direccion'],
+                'ubigeo'     => $ubigeo_cod,
+                'ubigeo_des' => $ubigeo_des
+            ]);
+        } else {
+            return response()->json(['error' => 'RUC no encontrado en la base de datos.']);
+        }
+
+    } else {
+        return response()->json(['error' => 'El documento debe tener 8 (DNI) u 11 dígitos (RUC).']);
     }
+}
   
 
     public function consultarcambio(Request $request){
