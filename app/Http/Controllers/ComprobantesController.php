@@ -1065,6 +1065,7 @@ class ComprobantesController extends Controller
       public function autocomplete($cliente){
         try {
             // Buscamos al cliente seleccionando explícitamente los campos necesarios
+            //consultas.holape.app
             $ruc = Cliente::where('clinum', '=', $cliente)
                   ->select('clicod', 'clinum', 'clinom', 'clidir', 'clicor', 'telefono', 'fecha_nacimiento', 'cuenta12', 'sex_id', 'est_civ_id', 'tdicod')
                   ->take(10)
