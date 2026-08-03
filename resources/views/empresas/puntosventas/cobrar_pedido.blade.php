@@ -977,9 +977,7 @@ function  buscarclienteruc(){
       $('#clidir').val(respuesta[0].dir);
       //  $('#cliteln').val(respuesta[0].telefono);
       $('#clicor').val(respuesta[0].cor);
-        // $('#clicorn4').val(respuesta[0].cor4);
-        // $('#clicorn2').val(respuesta[0].cor2);
-      //  $('#clicorn3').val(respuesta[0].cor3);
+        
       $('#clicod').val(respuesta[0].clicod);
       $("#tdicod").val(respuesta[0].tdicod).attr('selected', 'selected');
 
@@ -1197,9 +1195,7 @@ function seleccionarcliente(){
    $('#clinom').val($('#clicod').find(':selected').attr('data-clinom'));
    $('#clidir').val($('#clicod').find(':selected').attr('data-direccion'));
    $('#clicor').val($('#clicod').find(':selected').attr('data-correo'));
-   $('#clicor2').val($('#clicod').find(':selected').attr('data-correo2'));
-   $('#clicor3').val($('#clicod').find(':selected').attr('data-correo3'));
-   $('#clicor4').val($('#clicod').find(':selected').attr('data-correo4'));
+   
     $("#clitel").val($('#clicod').find(':selected').attr('data-telefono'));
     
       if($('#tdicod').val() =='6' ){
@@ -1351,15 +1347,7 @@ $('#predeterminado_1').val(totgrav.toFixed(2));
     var  precio_ref =  $('#pre_producto_ref').val();
 
     
-  //  var pro_rel = $('#producto').select2('data')[0].pro_rel;
-  //  var contar = $('#producto').select2('data')[0].presentacion;
-
-  /*if(contar>0){
-        presentaciones(proid);
-
-        $("#modal-presentaciones").modal("show");
-      }else{*/
-
+  
         if(precio_ref===undefined){
           $('#grdet').append("<tr>"+
            "<td width='200px' ><input type='text' readonly='readonly' class='form-control input-sm'  value='"+codigo+"'></td>"+
@@ -1966,24 +1954,7 @@ $('#predeterminado_1').val(totgrav.toFixed(2));
                   <input name="clicor" id="clicor" value="{{$cabecera->clicorcli}}" class="form-control">
                 </div>
               </div>
-                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                <div hidden="hidden"  class="form-group form-group-sm">
-                  <label>Correo Electr&oacute;nico 2</label>
-                  <input name="clicor2" id="clicor2" value="{{$cabecera->clicorcli2}}" class="form-control">
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                <div hidden="hidden"  class="form-group form-group-sm">
-                  <label>Correo Electr&oacute;nico 3</label>
-                  <input name="clicor3" id="clicor3" value="{{$cabecera->clicorcli3}}" class="form-control">
-                </div>
-              </div>
-              <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                <div hidden="hidden"  class="form-group form-group-sm">
-                  <label>Correo Electr&oacute;nico 4</label>
-                  <input name="clicor4" id="clicor4" value="{{$cabecera->clicorcli4}}" class="form-control">
-                </div>
-              </div>
+                
               <!--<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
                 <div class="form-group form-group-sm">
                   <label>Tel&eacute;fono</label>

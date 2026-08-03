@@ -1033,9 +1033,7 @@ function  buscarcliente(){
      $('#clidirn').val(respuesta[0].dir);
      $('#cliteln').val(respuesta[0].telefono);
      $('#clicorn').val(respuesta[0].cor);
-     $('#clicorn4').val(respuesta[0].cor4);
-     $('#clicorn2').val(respuesta[0].cor2);
-     $('#clicorn3').val(respuesta[0].cor3);
+     
      $('#clicodn').val(respuesta[0].clicod);
      $("#tdicodn").val(respuesta[0].tdicod).attr('selected', 'selected');
 
@@ -1143,9 +1141,7 @@ function seleccionarcliente(){
   $('#clinom').val($('#clicod').find(':selected').attr('data-clinom'));
   $('#clidir').val($('#clicod').find(':selected').attr('data-direccion'));
   $('#clicor').val($('#clicod').find(':selected').attr('data-correo'));
-  $('#clicor2').val($('#clicod').find(':selected').attr('data-correo2'));
-  $('#clicor3').val($('#clicod').find(':selected').attr('data-correo3'));
-  $('#clicor4').val($('#clicod').find(':selected').attr('data-correo4'));
+  
   $("#clitel").val($('#clicod').find(':selected').attr('data-telefono'));
   $('#ubi_cod_env option[value="'+$('#clicod').find(':selected').attr('data-ubicod')+'"]').prop('selected', true);
 
@@ -2140,7 +2136,7 @@ $(document).ready(function() {
 
           <tr>
             <td>
-              <textarea class="form-control" rows="1" maxlength="250" name="observaciones"></textarea>
+              <textarea class="form-control" rows="1" maxlength="250" name="ccaobs"></textarea>
             </td>
           </tr>
         </tbody>
@@ -2491,7 +2487,7 @@ $(document).ready(function() {
       <select class="form-control selectpicker input-sm" data-show-subtext="true" data-live-search="true" name="clicod" id="clicod" onchange="seleccionarcliente();">
         <option>VENTA AL PORTADOR</option>
         @foreach($clientes as $cliente)
-        <option value="{{$cliente->clicod}}" data-documento="{{$cliente->tdicod}}" data-clinum="{{$cliente->clinum}}"  data-direccion="{{$cliente->clidir}}" data-clinom="{{$cliente->clinom}}" data-correo="{{$cliente->clicor}}" data-correo2="{{$cliente->clicor2}}" data-correo3="{{$cliente->clicor3}}" data-correo4="{{$cliente->clicor4}}"  data-telefono="{{$cliente->telefono}}">{{$cliente->clinum}} - {{$cliente->clinom}}</option>
+        <option value="{{$cliente->clicod}}" data-documento="{{$cliente->tdicod}}" data-clinum="{{$cliente->clinum}}"  data-direccion="{{$cliente->clidir}}" data-clinom="{{$cliente->clinom}}" data-correo="{{$cliente->clicor}}" data-telefono="{{$cliente->telefono}}">{{$cliente->clinum}} - {{$cliente->clinom}}</option>
         @endforeach
       </select>
       <input type="hidden" readonly="readonly" name="clinom" id="clinom">
@@ -2535,28 +2531,10 @@ $(document).ready(function() {
     <input name="clicor" id="clicor" value="{{old('clicor')}}" class="form-control">
   </div>
 </div>
-<div hidden="hidden" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-  <div class="form-group form-group-sm">
-    <label>Correo Electr&oacute;nico 2</label>
-    <input name="clicor2" id="clicor2" value="" class="form-control">
-  </div>
-</div>
-<div hidden="hidden"  class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-  <div class="form-group form-group-sm">
-    <label>Correo Electr&oacute;nico 3</label>
-    <input name="clicor3" id="clicor3" value="" class="form-control">
-  </div>
-</div>
-<div hidden="hidden"  class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-  <div class="form-group form-group-sm">
-    <label>Correo Electr&oacute;nico 4</label>
-    <input name="clicor4" id="clicor4" value="" class="form-control">
-  </div>
-</div>
               </div>
           </div>
 
-          <div class="row" id="div_alerta_puntos" style="display:none; margin-top: 15px; margin-bottom: 15px;">
+          <!--<div class="row" id="div_alerta_puntos" style="display:none; margin-top: 15px; margin-bottom: 15px;" hidden="hidden">
     <div class="col-lg-12">
         <div class="alert alert-info" id="box_alerta_puntos" style="border-radius: 8px;">
             <h4 style="margin-bottom: 5px;">
@@ -2566,7 +2544,7 @@ $(document).ready(function() {
             <div id="lista_premios_a_entregar" style="margin-top: 10px;"></div>
         </div>
     </div>
-</div>
+</div>-->
 
           <div class="box-header" style="background-color:blue;">
             </div>

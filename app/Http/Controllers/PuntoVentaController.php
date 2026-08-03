@@ -3468,7 +3468,7 @@ public function restaurantpunto(Request $request)
     $fecemi = $request->get('fecEmi');
     $fecven = $request->get('fecVen');
     $tipo_venta = $request->get('tipoventa');
-    $observaciones = $request->get('observaciones');
+    $ccaobs = $request->get('ccaobs');
     $pagar = $request->get('pagar');
     $vuelto = $request->get('vuelto');
     $monto = $request->get('monto');
@@ -3616,7 +3616,7 @@ public function restaurantpunto(Request $request)
     $cabecera->tdocod = $tdocod;
     $cabecera->topcod = $topcod;
     $cabecera->ccafem = $fecemi;
-    $cabecera->observaciones = $request->get('observaciones');
+    $cabecera->ccaobs = $request->get('ccaobs');
     $cabecera->id_almacen = $id_almacen;
     $cabecera->tot_icbper = $tot_icbper;
     $cabecera->cod_tip_ope ='01';
@@ -3640,7 +3640,7 @@ public function restaurantpunto(Request $request)
         $cabecera->totalcontado = '0';
     }
    
-    $cabecera->ccaobs = $observaciones;
+    $cabecera->ccaobs = $ccaobs;
     $cabecera->tdicod = $tdicod;
     $cabecera->ccandi = $cliruc;
     $cabecera->ccanom = $clinom;
@@ -3672,7 +3672,7 @@ public function restaurantpunto(Request $request)
     $cabecera->ccaitv = $total;
     $cabecera->id_empresa_negocio = $sucursal->id_empresa_negocio;
     $cabecera->clicod = $cliente->clicod;
-    $cabecera->ccaobs = $observaciones;
+    $cabecera->ccaobs = $ccaobs;
     $cabecera->paga = $pagar;
    
     if(!empty($tip_cam->CamVenta)){
@@ -3931,14 +3931,14 @@ public function restaurantpunto(Request $request)
             }
 
             $valorigvtotal =  $valortotal-$valorsubtotal;
-            $detalle->valor_unitario = $valorunitario;
+            //$detalle->valor_unitario = $valorunitario;
             $detalle->por_des = $desc_por;
             $detalle->cdepuni = $preciouni;
             $detalle->cdevun = $valoruni;
             $detalle->cdevve = $valortotal;
             $detalle->cdepve = $valorsubtotal;
             $detalle->cdeigv = $valorigvtotal;
-            $detalle->fecha_venta = $fecemi;
+            //$detalle->fecha_venta = $fecemi;
             $detalle->flete = $codpro->flete;
           
             if(isset($stockprod)){
@@ -4016,7 +4016,7 @@ public function restaurantpunto(Request $request)
             }
 
             $valorigvtotal =  $valortotal-$valorsubtotal;
-            $detalle->valor_unitario = $valorunitario;
+            //$detalle->valor_unitario = $valorunitario;
             $detalle->por_des = $desc_por;
             $detalle->desc_mon = $desc_mon;
             $detalle->cdepuni = $preciouni;
@@ -4025,7 +4025,7 @@ public function restaurantpunto(Request $request)
             $detalle->desc_mon = $descuento[$index];
             $detalle->cdepve = $valorsubtotal;
             $detalle->cdeigv = $valorigvtotal;
-            $detalle->fecha_venta = $fecemi;
+            //$detalle->fecha_venta = $fecemi;
             if(!empty($id_almacen)){
                 $detalle->id_almacen_pro = $id_almacen;
             }
@@ -4425,14 +4425,14 @@ public function restaurantpunto(Request $request)
         $detalle->id_almacen_pro = $id_almacen_pro[$index] ?? $id_almacen;
         $detalle->icbper_det = $icbper[$index] ?? 0;
         $detalle->mon_icbper_det = $mon_icbper[$index] ?? 0;
-        $detalle->valor_unitario = $valoruni;
+        //$detalle->valor_unitario = $valoruni;
         $detalle->por_des = ($descuento[$index] ?? 0) > 0 ? ($descuento[$index] / $preciouni) * 100 : 0;
         $detalle->cdepuni = $preciouni;
         $detalle->cdevun = $valoruni;
         $detalle->cdevve = $valortotal;
         $detalle->cdepve = $valorsubtotal;
         $detalle->cdeigv = $valortotal - $valorsubtotal;
-        $detalle->fecha_venta = $fecemi;
+        //$detalle->fecha_venta = $fecemi;
         $detalle->save();
 
         // Registrar movimiento
@@ -8149,7 +8149,7 @@ public function imprimir_precuenta_venta_directa($cpe_id)
         $nomdoc = DB::tABLE('tipo_documento')->where('tdocod',$tipdoc)->first();
 
 
-        if($tipdoc == '01' || $tipdoc == '03' || $tipdoc == '13' || $tipdoc == '07' || $tipdoc == '99'){
+        if($tipdoc == '01' || $tipdoc == '03' || $tipdoc == '13' || $tipdoc == '07' || $tipdoc == '15' || $tipdoc == '99'){
           $cabecera = DB::tABLE('cpe_cabecera as cab')
           ->leftjoin('cliente as cli','cab.ccandi','=','cli.clinum')
           ->leftjoin('tipo_documento as tdo','cab.tdocod','=','tdo.tdocod')
