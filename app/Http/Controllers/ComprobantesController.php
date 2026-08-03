@@ -1062,47 +1062,56 @@ class ComprobantesController extends Controller
     }     
 }
 
-      public function autocomplete($cliente){
+      public function autocomplete($cliente)
+    {
         try {
-            // Buscamos al cliente seleccionando explícitamente los campos necesarios
-            //consultas.holape.app
+            // 1. Búsqueda en base de datos local de Clientes
             $ruc = Cliente::where('clinum', '=', $cliente)
-                  ->select('clicod', 'clinum', 'clinom', 'clidir', 'clicor', 'telefono', 'fecha_nacimiento', 'cuenta12', 'sex_id', 'est_civ_id', 'tdicod')
-                  ->take(10)
-                  ->get();
+                ->select('clicod', 'clinum', 'clinom', 'clidir', 'clicor', 'telefono', 'fecha_nacimiento', 'cuenta12', 'sex_id', 'est_civ_id', 'tdicod')
+                ->take(10)
+                ->get();
 
             $results = array();
 
-            if(count($ruc) == 0){ 
-                if(strlen($cliente) <= 8){ 
-                    // CONSULTA DNI
+            if (count($ruc) == 0) { 
+                // 2. Si no está en BD local de clientes, buscar por DNI o RUC
+                if (strlen($cliente) <= 8) { 
+                    // CONSULTA DNI (Prueba consultas.holape.app -> apiperu.dev)
                     $leer_respuesta = self::consultardni($cliente);
                     
                     if (isset($leer_respuesta['success']) && $leer_respuesta['success']) {
+                        $d = $leer_respuesta['data'];
+
+                        // Construir nombre completo segun la estructura devuelta
+                        $nombreCompleto = !empty($d['razon_social']) 
+                            ? $d['razon_social'] 
+                            : trim(($d['nombres'] ?? '') . ' ' . ($d['apellido_paterno'] ?? '') . ' ' . ($d['apellido_materno'] ?? ''));
+
                         $results[] = [
-                            'value'  => $leer_respuesta['data']['numero'] ?? $cliente,
-                            'nom'    => ($leer_respuesta['data']['nombres'] ?? '') . ' ' . ($leer_respuesta['data']['apellido_paterno'] ?? '') . ' ' . ($leer_respuesta['data']['apellido_materno'] ?? ''),
-                            'dir'    => '--',
-                            'tdicod' => '1'
+                            'value'  => $d['dni'] ?? ($d['numero'] ?? $cliente),
+                            'nom'    => $nombreCompleto,
+                            'dir'    => $d['direccion'] ?? '--',
+                            'tdicod' => '1', // 1 = DNI
+                            'source' => $leer_respuesta['source'] ?? 'desconocido'
                         ]; 
                     }
                 } else {          
-                    // CONSULTA RUC (Tu API Propia)
+                    // CONSULTA RUC
                     $leer_respuesta = self::consultaruc($cliente); 
 
-                    // Validamos que la API haya respondido success = true
                     if (isset($leer_respuesta['success']) && $leer_respuesta['success']) {
                         $results[] = [
-                            'value'  => $leer_respuesta['data']['ruc'],
-                            'nom'    => $leer_respuesta['data']['razon_social'],
-                            'dir'    => $leer_respuesta['data']['direccion'],
-                            'tdicod' => '6',
-                            'ubigeo' => $leer_respuesta['data']['ubigeo'] ?? ''
+                            'value'  => $leer_respuesta['data']['ruc'] ?? $cliente,
+                            'nom'    => $leer_respuesta['data']['razon_social'] ?? ($leer_respuesta['data']['nombre_o_razon_social'] ?? ''),
+                            'dir'    => $leer_respuesta['data']['direccion'] ?? ($leer_respuesta['data']['direccion_completa'] ?? '--'),
+                            'tdicod' => '6', // 6 = RUC
+                            'ubigeo' => $leer_respuesta['data']['ubigeo'] ?? '',
+                            'source' => $leer_respuesta['source'] ?? 'api_ruc'
                         ]; 
                     }
                 }        
             } else { 
-                // Búsqueda interna en base de datos de Clientes
+                // 3. Si se encontró en la BD local de clientes
                 foreach($ruc as $item){
                     $results[] = [
                         'value'            => $item->clinum,
@@ -1117,7 +1126,8 @@ class ComprobantesController extends Controller
                         'cuenta12'         => $item->cuenta12,
                         'sex_id'           => $item->sex_id,
                         'est_civ_id'       => $item->est_civ_id,
-                        'ubigeo'           => ''
+                        'ubigeo'           => '',
+                        'source'           => 'bd_clientes'
                     ];
                 }        
             }
@@ -1125,7 +1135,8 @@ class ComprobantesController extends Controller
             return response()->json($results);
 
         } catch(\Exception $e){
-            return response()->json(['error' => 'Error en la búsqueda']);
+            \Log::error('Error en autocomplete: ' . $e->getMessage());
+            return response()->json(['error' => 'Error en la búsqueda'], 500);
         }
     }
 
@@ -1387,7 +1398,143 @@ class ComprobantesController extends Controller
         }
     }
 
-    public function consultardni($dni){
+    public function consultardni($dni)
+    {
+        // 1. Validar que sean 8 dígitos
+        if (!preg_match('/^\d{8}$/', $dni)) {
+            return ['success' => false, 'message' => 'DNI inválido'];
+        }
+
+        // 2. INTENTO 1: Consultar a tu API Centralizada (consultas.holape.app)
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://consultas.holape.app/api/v1/dni/" . $dni,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_HTTPHEADER => [
+                'Accept: application/json',
+            ],
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if (!$err) {
+            $respuesta_api_central = json_decode($response, true);
+            
+            // Si la API Central lo encontró exitosamente, retornamos esa respuesta
+            if (isset($respuesta_api_central['success']) && $respuesta_api_central['success']) {
+                return $respuesta_api_central;
+            }
+        }
+
+        // 3. INTENTO 2: Si NO lo encontró en consultas.holape.app, consultar a apiperu.dev
+        $params = json_encode(['dni' => $dni]);
+        $curl = curl_init();
+        
+        $token = env('APIPERU_TOKEN', 'c7c656604942b0a6df5fa225835e99eb7376cf841d38781b91f651f72e03cc09');
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://apiperu.dev/api/dni",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_POSTFIELDS => $params,        
+            CURLOPT_HTTPHEADER => [
+                'Accept: application/json',
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $token
+            ],        
+        ));
+        
+        $response_ext = curl_exec($curl);
+        $err_ext = curl_error($curl);
+        curl_close($curl);
+
+        if ($err_ext) {
+            return ['success' => false, 'message' => 'Error cURL en API externa: ' . $err_ext];
+        }
+
+        $res_apiperu = json_decode($response_ext, true);
+        
+        if (isset($res_apiperu['success']) && $res_apiperu['success']) {
+            $dataExt = $res_apiperu['data'] ?? [];
+            $nombres = $dataExt['nombres'] ?? '';
+            $paterno = $dataExt['apellido_paterno'] ?? '';
+            $materno = $dataExt['apellido_materno'] ?? '';
+
+            return [
+                'success' => true,
+                'source'  => 'apiperu',
+                'data'    => [
+                    'dni'              => $dataExt['numero'] ?? $dni,
+                    'numero'           => $dataExt['numero'] ?? $dni,
+                    'nombres'          => $nombres,
+                    'apellido_paterno' => $paterno,
+                    'apellido_materno' => $materno,
+                    'razon_social'     => trim("{$nombres} {$paterno} {$materno}"),
+                    'direccion'        => !empty($dataExt['direccion']) ? $dataExt['direccion'] : '--'
+                ]
+            ];
+        }
+
+        return [
+            'success' => false,
+            'message' => 'DNI no encontrado ni en base local ni en apiperu.dev'
+        ];
+    }
+
+/**
+ * Función auxiliar optimizada para limpiar direcciones del padrón
+ */
+private function formatearDireccion($data)
+{
+    $partes = [];
+
+    // Helper interno para limpiar guiones vacíos del padrón SUNAT
+    $limpiar = function($val) {
+        $v = trim((string)$val);
+        return ($v === '-' || $v === '') ? null : $v;
+    };
+
+    $tipoVia    = $limpiar($data->tipo_via ?? null);
+    $nombreVia  = $limpiar($data->nombre_via ?? null);
+    $numero     = $limpiar($data->numero ?? null);
+    $interior   = $limpiar($data->interior ?? null);
+    $tipoZona   = $limpiar($data->tipo_zona ?? null);
+    $codigoZona = $limpiar($data->codigo_zona ?? null);
+    $lote       = $limpiar($data->lote ?? null);
+
+    if ($tipoVia && $nombreVia) {
+        $partes[] = $tipoVia . ' ' . $nombreVia;
+    } elseif ($nombreVia) {
+        $partes[] = $nombreVia;
+    }
+
+    if ($numero)   $partes[] = 'NRO. ' . $numero;
+    if ($interior) $partes[] = 'INT. ' . $interior;
+
+    if ($tipoZona && $codigoZona) {
+        $partes[] = $tipoZona . ' ' . $codigoZona;
+    } elseif ($codigoZona) {
+        $partes[] = $codigoZona;
+    }
+
+    if ($lote) $partes[] = 'MZ/LT ' . $lote;
+
+    if (!empty($data->departamento)) {
+        $partes[] = '- ' . $data->departamento . ' / ' . $data->provincia . ' / ' . $data->distrito;
+    }
+
+    $direccionFinal = implode(' ', $partes);
+
+    return !empty($direccionFinal) ? $direccionFinal : '--';
+}
+    
+    /*public function consultardni($dni){
 
           $params = json_encode(['dni' => $dni]);
           $curl = curl_init();
@@ -1418,14 +1565,7 @@ class ComprobantesController extends Controller
           }
 
 
-    }
-     
-   
-   
-  
-
-
- 
+    }*/
   
 
    public function generarresumen($codfact){

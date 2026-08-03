@@ -33,6 +33,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//Route::get('/api/v1/dni/{dni}', 'SunatController@consultarDni');
+Route::get('/v1/dni/{dni}', 'SunatController@consultarDni');
+
 // Ruta para pedir tickets
 Route::get('/impresion/pendiente', function(Request $request) {
     if ($request->query('token') !== 'HOLAPE10') {
