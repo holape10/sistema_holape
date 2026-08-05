@@ -146,7 +146,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
+        //Collective\Html\HtmlServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
          Barryvdh\DomPDF\ServiceProvider::class,
 
@@ -164,7 +164,7 @@ return [
         MasterSoft\Providers\RouteServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
           Milon\Barcode\BarcodeServiceProvider::class,
-           Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider::class
+           //Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider::class
 
     ],
 

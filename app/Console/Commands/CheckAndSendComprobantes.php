@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Console\Commands;
+namespace MasterSoft\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Jobs\SendComprobanteToSunat;
+use MasterSoft\Jobs\SendComprobanteToSunat;
 use MasterSoft\cpe_cabecera;
 use MasterSoft\Empresa;
 use Carbon\Carbon;

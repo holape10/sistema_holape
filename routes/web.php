@@ -272,7 +272,7 @@ Route::get('/buscartipos/{producto}','ProductosController@buscartipos');
 Route::get('/buscarfamilias/{id}', 'ProductosController@buscarfamilias');
 
 Route::get('/buscarsucursales/{empresa}','EmpresaNegociosController@buscarsucursales');
-Auth::routes();
+//Auth::routes();
 
 //REPORTES
 Route::get('/reportes/{tipo}','ReportesController@generarreporte');
